@@ -1,3 +1,7 @@
+// eslint-disable-next-line import/no-import-module-exports
+import Recipe from './recipeModel';
+
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 const mongoose = require('mongoose');
 
@@ -11,18 +15,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a password']
   },
-  postedRecipes: [ {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Recipe'
-  }],
-  yumdRecipe: [{
-    type: mongoose.Schema.Types.ObejectId,
-    ref: 'Recipe'
-  }],
-  ewwdRecipe: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Recipe'
-  }]
+  // https://mongoosejs.com/docs/schematypes.html#maps
+  postedRecipes:  { 
+    type: Map,
+      of: Recipe, 
+    } ,
+    yumdRecipe: {
+      type: Map,
+      of: Recipe, 
+    },
+    ewwdRecipe: {
+      type: Map,
+      of: Recipe, 
+    }
 });
 
 const User = mongoose.model('user', userSchema);
