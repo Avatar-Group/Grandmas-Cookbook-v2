@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=production node server/server.js",
     "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development webpack serve --open & NODE_ENV=development nodemon server/server.js"
+    "dev": "NODE_ENV=development webpack serve --open & NODE_ENV=development nodemon server/server.js",
+    "backend": "nodemon server/server.js"
   },
   "repository": {
     "type": "git",
@@ -32,9 +33,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "node": "^19.8.1",
     "node-fetch": "^2.6.9",
     "openai": "^3.2.1",
+    "passport": "^0.6.0",
+    "passport-google-oauth": "^2.0.0",
+    "passport-google-oauth2": "^0.2.0",
     "pg": "^8.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
