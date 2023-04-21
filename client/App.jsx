@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Typography, AppBar, Container, Toolbar, MuiPaper } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CardGrid from './containers/cardGrid.jsx';
+import TestForm from './components/testForm.jsx';
 
 const theme = createTheme({
   palette: {
@@ -27,19 +28,26 @@ const theme = createTheme({
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <header>
-        <Typography align="center" variant="h1" color="primary">
-          {"Grandma's Cookbook"}
-        </Typography>
-        <div className="actionHeader">
-          <Typography variant="h2" align="center" color="primary">
-            Recipes
+    <div>
+      <ThemeProvider theme={theme}>
+        <header>
+          <Typography align="center" variant="h1" color="primary">
+            {"Grandma's Cookbook"}
           </Typography>
-        </div>
-      </header>
-      <CardGrid />
-    </ThemeProvider>
+          <div className="actionHeader">
+            <Typography variant="h2" align="center" color="primary">
+              Recipes
+            </Typography>
+          </div>
+        </header>
+        <CardGrid />
+      </ThemeProvider>
+      <div className='testing-section'>
+        <h1>START TEST SECTION</h1>
+    
+      </div>
+    </div>
+    
   );
 }
 
