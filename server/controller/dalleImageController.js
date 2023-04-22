@@ -1,6 +1,4 @@
 const { Configuration, OpenAIApi } = require('openai');
-const fs = require('fs/promises');
-const path = require('path');
 const { Readable } = require('stream');
 const { uploadeFileToS3 } = require('../utils/awsS3Connection');
 
@@ -16,7 +14,7 @@ const convertStrToFileName = (str) =>
 const dalleImageController = {};
 
 dalleImageController.generateImage = async (req, res, next) => {
-  console.log('reached generateImage');
+  // console.log('reached generateImage');
   const { imagePath } = req.body;
   if (!imagePath) {
     try {
@@ -54,7 +52,7 @@ dalleImageController.generateImage = async (req, res, next) => {
 
       return next();
     } catch (error) {
-      console.log("error in dalle-ai")
+      console.log('error in dalle-ai');
       return next({
         log: `Error encountered in dalleImageController.generateImage, ${error}`,
         message: 'Error encountered when generating image via the DallE AI.',
