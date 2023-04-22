@@ -44,6 +44,7 @@ export default function BasicTabs() {
         >
           <Tab label="Food Network or Epicurious" />
           <Tab label="Keyword Search" />
+          <Tab label ="Create Recipe" />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
