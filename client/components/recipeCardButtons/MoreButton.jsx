@@ -7,7 +7,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCard } from '../../slices/cardSlice';
-import { purple } from '@mui/material/colors';
 
 export default function MoreButton({ recipe }) {
   const [open, setOpen] = React.useState(false);
@@ -39,21 +38,21 @@ export default function MoreButton({ recipe }) {
 
   const canEditLogic = () => {
     if (canEdit) {
-      console.log(
-        'ingredientText',
-        document.getElementById(`${recipe.id}ingredientText`).textContent
-      );
+      // console.log(
+      //   'ingredientText',
+      //   document.getElementById(`${recipe.id}ingredientText`).textContent
+      // );
       setSaveEditButton('Edit');
-      fetch(`/recipe/update/${recipe.id}`, {
+      fetch(`/recipe/update/${recipe._id}`, {
         method: 'PUT',
         // edit the ingredients & directions list and also formatting by separating into new lines
         body: JSON.stringify({
           ...recipe,
           ingredientList: document
-            .getElementById(`${recipe.id}ingredientText`)
+            .getElementById(`${recipe._id}ingredientText`)
             .textContent.split('\n'),
           directions: document
-            .getElementById(`${recipe.id}directions`)
+            .getElementById(`${recipe._id}directions`)
             .textContent.split('\n'),
         }),
         headers: {
@@ -108,10 +107,11 @@ export default function MoreButton({ recipe }) {
         <DialogTitle id="scroll-dialog-title">{recipe.title}</DialogTitle>
         <DialogContent dividers={scroll === 'paper'}>
           <DialogContentText
-            id={`${recipe.id}ingredientText`}
+            id={`${recipe._id}ingredientText`}
             ref={descriptionElementRef}
             tabIndex={-1}
             contentEditable={canEdit.toString()}
+            suppressContentEditableWarning
             // multiline
             style={{ whiteSpace: 'pre-line' }}
           >
@@ -121,10 +121,11 @@ export default function MoreButton({ recipe }) {
 
         <DialogContent dividers={scroll === 'paper'}>
           <DialogContentText
-            id={`${recipe.id}directions`}
+            id={`${recipe._id}directions`}
             ref={descriptionElementRef}
             tabIndex={-1}
             contentEditable={canEdit.toString()}
+            suppressContentEditableWarning
             // multiline
             style={{ whiteSpace: 'pre-line' }}
           >

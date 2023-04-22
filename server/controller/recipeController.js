@@ -85,7 +85,7 @@ recipeController.updateRecipe = async (req, res, next) => {
 
   try {
     // search for current user
-    const user = await User.findById(userId);
+    // const user = await User.findById(userId);
 
     const {
       url,
@@ -98,7 +98,6 @@ recipeController.updateRecipe = async (req, res, next) => {
     } = req.body;
 
     const update = {
-      createdBy: user._id,
       url,
       title,
       description,
@@ -108,7 +107,7 @@ recipeController.updateRecipe = async (req, res, next) => {
       imagePath: res.locals.awsimagePath || imagePath,
     };
 
-    const updateRecipe = await Recipe.findOneAndUpdate(
+    const updateRecipe = await Recipe.findByIdAndUpdate(
       recipeId, // recipeId from state
       update, // the changes
       { new: true } // will return updated document

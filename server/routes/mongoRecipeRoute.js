@@ -25,14 +25,10 @@ router.post(
 );
 
 // update exisiting recipe, only through user
-router.put(
-  '/updateRecipe/:userId/:recipeId',
-  recipeController.updateRecipe,
-  (req, res) => {
-    console.log('end of update recipe route');
-    res.status(200).json(res.locals);
-  }
-);
+router.put('/update/:recipeId', recipeController.updateRecipe, (req, res) => {
+  console.log('end of update recipe route');
+  res.status(200).json(res.locals.updateRecipe);
+});
 
 // delete recipe from database & user's recipe list
 router.delete(
