@@ -5,7 +5,7 @@ const userController = require('../controller/userController');
 // get all of user's recipe
 router.get('/postedRecipes/:id', userController.getAllUsersRecipes, (req, res) => {
   console.log('end of get user\'s recipe');
-  res.status(200).json(res.locals.allRecipes);
+  res.status(200).json(res.locals.postedRecipes);
 });
 
 // get user's one recipe

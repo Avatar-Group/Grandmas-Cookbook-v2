@@ -22,7 +22,7 @@ recipeController.addNewRecipe = async (req, res, next) => {
     // make sure to also add to user's obj of recipes
     const { 
       url,
-      title, 
+      recipeTitle, 
       description, 
       directions, 
       ingredientName, 
@@ -31,38 +31,51 @@ recipeController.addNewRecipe = async (req, res, next) => {
       imagePath 
     } = req.body;
 
+    // console.log('Title:', req.body.recipeTitle)
+    // console.log('Description', req.body.description)
+    // console.log('Directions:', req.body.directions)
+    // console.log("Ingredient Name:", req.body.ingredients[0].name)
+    // console.log('IngredientMeasurement', req.body.ingredients[0].measurement)
     // check if input fields are properly filled
-    if (!title || !description || !directions || !ingredientName || !ingredientMeasurement) {
+    if (!recipeTitle || !directions || !req.body.ingredients[0].name || !req.body.ingredients[0].measurement) {
       res.status(404);
       return next({
         log: 'error in recipeController.addRecipe',
-        message: { err: 'invalid date - missing inputs' }
+        message: { err: 'invalid recipe submission - missing inputs' }
       });
     }
+    
     // search for current user
-    const user = await User.findById(userId);
+    // WAITING FOR MICHAEL TO DO THE OAUTH
+    // const user = await User.findById(userId);
+    
     // declare input for new recipe
-    const newRecipe = new Recipe({
-      createdBy: user._id,
+    const newRecipe = {
+      // createdBy: user._id
+      createdBy: "helloworld",
       // eslint-disable-next-line object-shorthand
       url: url,
-      recipeTitle: title,
+      // eslint-disable-next-line object-shorthand
+      recipeTitle: recipeTitle,
       // eslint-disable-next-line object-shorthand
       description: description,
       // eslint-disable-next-line object-shorthand
       directions: directions,
       ingredients: [{
-        name: ingredientName,
-        measurement: ingredientMeasurement
+        name: req.body.ingredients[0].name,
+        measurement: req.body.ingredients[0].measurement
       }],
       // eslint-disable-next-line object-shorthand
       tastyId: tastyId,
       imagePath: res.locals.awsimagePath || imagePath,
-    });
-
+    };
+    console.log(`hello from above newRecipe.save`);
+    console.log(`newRcipe: ${JSON.stringify(newRecipe)}`);
     // create query to add to the database
-    const recipe = await newRecipe.save();
+    const recipe = await Recipe.create(newRecipe);
+    console.log(`hello from below newRecipe.save`);
     res.locals.newRecipe = recipe;
+    console.log(`hello from end of try block, addrecipe`);
     return next();
   }
   catch(err) {
@@ -83,11 +96,11 @@ recipeController.updateRecipe = async (req, res, next) => {
 
     const { 
       url, 
-      title, 
+      recipeTitle, 
       description, 
       directions, 
-      ingredientName, 
-      ingredientMeasurement, 
+      // ingredientName, 
+      // ingredientMeasurement, 
       tastyId,
       imagePath 
     } = req.body;
@@ -96,14 +109,15 @@ recipeController.updateRecipe = async (req, res, next) => {
       createdBy: user._id,
       // eslint-disable-next-line object-shorthand
       url: url,
-      recipeTitle: title,
+            // eslint-disable-next-line object-shorthand
+      recipeTitle: recipeTitle,
       // eslint-disable-next-line object-shorthand
       description: description,
       // eslint-disable-next-line object-shorthand
       directions: directions,
       ingredients: [{
-        name: ingredientName,
-        measurement: ingredientMeasurement
+        name: req.body.ingredients[0].name,
+        measurement: req.body.ingredients[0].measurement,
       }],
       // eslint-disable-next-line object-shorthand
       tastyId: tastyId,

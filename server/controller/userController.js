@@ -17,7 +17,7 @@ userController.getAllUsersRecipes = async (req, res, next) => {
       return res.status(404).json({ err: 'User not found' });
     };
 
-    res.locals.allRecipes = user.postedRecipes;
+    res.locals.postedRecipes = user.postedRecipes;
     return next();
   } 
   // error handler

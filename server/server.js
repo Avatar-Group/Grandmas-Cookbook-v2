@@ -15,7 +15,7 @@ app.use('/dist', express.static(path.join(__dirname, '../dist/')));
 
 // Route for all recipe related features
 const tastyRouter = require('./routes/tastyRoute');
-const recipeRouter = require('./routes/recipeRoute');
+const recipeRouter = require('./routes/mongoRecipeRoute');
 const userRouter = require('./routes/userRoute');
 
 app.use('/tasty', tastyRouter);

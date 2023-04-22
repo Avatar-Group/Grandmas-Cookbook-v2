@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const recipeController = require('../controller/recipeController');
 
+
 // get all recipes from database
 router.get('/allRecipes', recipeController.getAllRecipes, (req, res) => {
   console.log('end of get all recipes route');
@@ -36,3 +37,5 @@ router.post('/updateRecipe/:recipeId', recipeController.downVoteRecipe, (req, re
   console.log('end of down vote recipe route');
   res.status(200).json(res.locals.downVoteRecipe);
 })
+
+module.exports = router;
