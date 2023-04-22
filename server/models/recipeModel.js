@@ -4,47 +4,40 @@ const mongoose = require('mongoose');
 const recipeSchema = new mongoose.Schema({
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   url: {
     type: String,
-    required: false
+    required: false,
   },
-  title : {
+  title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: false
+    required: false,
   },
-  directions: [{
-    type: String,
-    required: true
-  }],
-  ingredientList: [{
-    name: {
+  directions: [
+    {
       type: String,
-      required: true
+      required: true,
     },
-    measurement: {
-      type: String,
-      required: true
-    }
-  }],
+  ],
+  ingredientList: [],
   yumdVote: {
     type: Number,
-    default: 0
+    default: 0,
   },
   ewwdVote: {
     type: Number,
-    default: 0
+    default: 0,
   },
   tastyId: {
     type: Number,
-    default: undefined
+    default: undefined,
   },
-  imagePath: String
+  imagePath: String,
 });
 
 const Recipe = mongoose.model('recipe', recipeSchema);

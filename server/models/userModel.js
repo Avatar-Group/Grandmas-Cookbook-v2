@@ -8,36 +8,35 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
-    required: [true, 'Please add an email']
+    required: [true, 'Please add an email'],
   },
   password: {
     type: String,
-    required: [true, 'Please add a password']
   },
-  
-  postedRecipes:  { 
+
+  postedRecipes: {
     type: Map,
-      of: mongoose.Schema.Types.ObjectId,
-      ref: 'Recipe', 
-    } ,
+    of: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe',
+  },
   yumdRecipes: {
     type: Map,
     of: mongoose.Schema.Types.ObjectId,
-    ref:'Recipe' 
+    ref: 'Recipe',
   },
   ewwdRecipes: {
     type: Map,
-    of: mongoose.Schema.Types.ObjectId, 
-    ref: 'Recipe'
+    of: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe',
   },
   userYumdVotes: {
     type: Number,
-    default: 0
+    default: 0,
   },
   userEwwdVotes: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 });
 
 const User = mongoose.model('user', userSchema);
