@@ -46,6 +46,7 @@ export default function MoreButton({ recipe }) {
       setSaveEditButton('Edit');
       fetch(`/recipe/update/${recipe.id}`, {
         method: 'PUT',
+        // edit the ingredients & directions list and also formatting by separating into new lines
         body: JSON.stringify({
           ...recipe,
           ingredientList: document
@@ -65,6 +66,7 @@ export default function MoreButton({ recipe }) {
         })
         .then((data) => {
           // console.log(data);
+          // setting updated recipe information to the cardSlice file
           dispatch(updateCard(data));
         })
         .catch((err) => console.log(`Error code: ${err}`));

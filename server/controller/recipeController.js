@@ -1,5 +1,6 @@
 const Recipe = require('../models/recipeModel');
-const User = require('../../models/userModel');
+// eslint-disable-next-line import/extensions
+const User = require('../models/userModel');
 
 const recipeController = {};
 
@@ -14,36 +15,53 @@ recipeController.getAllRecipes = (req, res, next) => {
 };
 
 // add a recipe to database
-recipeController.addRecipe = async (req, res, next) => {
-  // make sure to also add to user's obj of recipes
+recipeController.addNewRecipe = async (req, res, next) => {
   const { userId } = req.params;
-  const { recipeTitle, description, directions, ingredientName, ingredientMeasurement, recipeImage } = req.body;
-
-  // check if input fields are properly filled
-  if (!recipeTitle || !description || !directions || !ingredients) {
-    res.status(404);
-    return next({
-      log: 'error in recipeController.addRecipe',
-      message: { err: 'invalid date - missing inputs' }
-    });
-  }
-  // search for current user
-  const user = await User.findById(userId);
-  // declare input for new recipe
-  const newRecipe = {
-    createdBy: user._id,
-    recipeTitle: recipeTitle,
-    description: description,
-    directions: directions,
-    ingredients: [{
-      name: ingredientName,
-      measurement: ingredientMeasurement
-    }]
-  };
-
-  // create query to add to the database
+  
   try {
-    const recipe = await Recipe.create(newRecipe);
+    // make sure to also add to user's obj of recipes
+    const { 
+      url,
+      title, 
+      description, 
+      directions, 
+      ingredientName, 
+      ingredientMeasurement,
+      tastyId, 
+      imagePath 
+    } = req.body;
+
+    // check if input fields are properly filled
+    if (!title || !description || !directions || !ingredientName || !ingredientMeasurement) {
+      res.status(404);
+      return next({
+        log: 'error in recipeController.addRecipe',
+        message: { err: 'invalid date - missing inputs' }
+      });
+    }
+    // search for current user
+    const user = await User.findById(userId);
+    // declare input for new recipe
+    const newRecipe = new Recipe({
+      createdBy: user._id,
+      // eslint-disable-next-line object-shorthand
+      url: url,
+      recipeTitle: title,
+      // eslint-disable-next-line object-shorthand
+      description: description,
+      // eslint-disable-next-line object-shorthand
+      directions: directions,
+      ingredients: [{
+        name: ingredientName,
+        measurement: ingredientMeasurement
+      }],
+      // eslint-disable-next-line object-shorthand
+      tastyId: tastyId,
+      imagePath: res.locals.awsimagePath || imagePath,
+    });
+
+    // create query to add to the database
+    const recipe = await newRecipe.save();
     res.locals.newRecipe = recipe;
     return next();
   }
@@ -56,33 +74,134 @@ recipeController.addRecipe = async (req, res, next) => {
 };
 
 // update a recipe to database
-recipeController.updateRecipe = (req, res, next) => {
+recipeController.updateRecipe = async (req, res, next) => {
+  const { userId, recipeId } = req.params;
 
+  try {
+    // search for current user
+    const user = await User.findById(userId);
+
+    const { 
+      url, 
+      title, 
+      description, 
+      directions, 
+      ingredientName, 
+      ingredientMeasurement, 
+      tastyId,
+      imagePath 
+    } = req.body;
+
+    const update = {
+      createdBy: user._id,
+      // eslint-disable-next-line object-shorthand
+      url: url,
+      recipeTitle: title,
+      // eslint-disable-next-line object-shorthand
+      description: description,
+      // eslint-disable-next-line object-shorthand
+      directions: directions,
+      ingredients: [{
+        name: ingredientName,
+        measurement: ingredientMeasurement
+      }],
+      // eslint-disable-next-line object-shorthand
+      tastyId: tastyId,
+      imagePath: res.locals.awsimagePath || imagePath,
+    };
+  
+    const updateRecipe = await Recipe.findOneAndUpdate(
+      recipeId, // recipeId from state
+      update, // the changes
+      { new: true } // will return updated document
+      );
+
+    res.locals.updateRecipe = updateRecipe;
+    return next();
+  }
+  catch (err) {
+    return next({
+      log: 'error in recipeController.updateRecipe',
+      message: { err: 'failed to update this recipe in database' }
+    });
+  }
 };
 
-// delete a recipe from database
-recipeController.deleteRecipe = (req, res, next) => {
+// delete a recipe from user's profile & database
+recipeController.deleteRecipe = async (req, res, next) => {
+  const { userId, recipeId } = req.params;
 
+  try {
+    // query for recipe ID by userID
+    const deleteRecipe = await Recipe.findOneAndDelete({
+      _id: recipeId,
+      createdBy: userId,
+    });
+
+    if (deleteRecipe) {
+      res.local.delete = {
+        success: true,
+        message: 'Recipe deleted successfully',
+        data: deleteRecipe,
+      };
+      return next();
+    } 
+    return res.status(404).json({
+      success: false,
+      error: 'Recipe not found',
+    });
+  }
+  catch (err) {
+    return next({
+      log: 'error in recipeController.deleteRecipe',
+      message: { err: 'Unable to delete recipe from database' }
+    })
+  };
 };
 
 // upvote a recipe in database
-recipeController.upVoteRecipe = (req, res, next) => {
-
+recipeController.upVoteRecipe = async (req, res, next) => {
+  const { recipeId, userId } = req.params;
+  
+  try {
+    // query for recipe by recipe ID and increment yumdVote
+    const upVoteRecipe = await Recipe.findByIdAndUpdate(
+      recipeId,
+      { $inc: { yumdVote: 1 } },
+      { new: true},
+    );
+    
+    res.locals.upVoteRecipe = upVoteRecipe;
+    return next();
+  }
+  catch (err) {
+    return next({
+      log: 'error in recipeController.upVoteRecipe',
+      message: { err: 'Could not yum this recipe '},
+    });
+  };
 };
 
 // downvote a recipe in database
-recipeController.downVoteRecipe = (req, res, next) => {
-
-};
-
-// add an image in database
-recipeController.addImage = (req, res, next) => {
-
-};
-
-// update an image in database
-recipeController.updateImage = (req, res, next) => {
-
+recipeController.downVoteRecipe = async (req, res, next) => {
+  const { recipeId } = req.params;
+  
+  try {
+    // query for recipe by iD and increment yumdVote
+    const downVoteRecipe = await Recipe.findByIdAndUpdate(
+      recipeId,
+      { $inc: { ewwdVote: 1 } },
+      { new: true},
+    );
+    res.locals.downVoteRecipe = downVoteRecipe;
+    return next();
+  }
+  catch (err) {
+    return next({
+      log: 'error in recipeController.downVoteRecipe',
+      message: { err: 'Could not eww this recipe '},
+    });
+  };
 };
 
 

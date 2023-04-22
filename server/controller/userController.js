@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/extensions
-const User = require('../../models/userModel');
+const User = require('../models/userModel');
 
 const userController = {};
 
@@ -57,7 +57,6 @@ userController.getUserOneRecipe = async (req, res, next) => {
       message: { err: 'failed to get user\'s recipe from database' }
     })
   }
-
 };
 
 // grab all user's yumd recipes
@@ -111,6 +110,60 @@ userController.getAllEwwdRecipes = async (req, res, next) => {
       status: 500,
       message: { err: 'failed to get all users recipes from database' }
     })
+  };
+};
+
+// update user's yumdRecipes an user's yumdVotes
+userController.updateUserYumdVotes = async (req, res, next) => {
+  const { userId, recipeId } = req.params;
+
+  try {
+    const user = await User.findById(userId);
+    const recipe = user.postedRecipes.get(recipeId)
+
+    // add recipe to yumdRecipe field
+    user.yumdRecipes.set(recipeId, recipe);
+
+    // increment user yumd vote 
+    user.userYumdVotes += 1;
+
+    await user.save();
+
+    req.user = user;
+    return next();
+  }
+  catch (err) {
+    return next({
+      log: 'error with updating yumd votes for user\'s recipe',
+      message: { err: 'Unable to yum a recipe' },
+    });
+  };
+};
+
+// update user's ewwddRecipes an user's yumdVotes
+userController.updateUserEwwdVotes = async (req, res, next) => {
+  const { userId, recipeId } = req.params;
+
+  try {
+    const user = await User.findById(userId);
+    const recipe = user.postedRecipes.get(recipeId)
+
+    // add recipe to ewwdRecipe field
+    user.ewwdRecipes.set(recipeId, recipe);
+
+    // increment user ewwd vote 
+    user.userEwwdVotes += 1;
+
+    await user.save();
+
+    req.user = user;
+    return next();
+  }
+  catch (err) {
+    return next({
+      log: 'error with updating ewwd votes for user\'s recipe',
+      message: { err: 'Unable to eww a recipe' },
+    });
   };
 };
 

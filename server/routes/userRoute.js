@@ -26,5 +26,18 @@ router.get('/userRecipe/:id', userController.getAllEwwdRecipes, (req, res) => {
   res.status(200).json(res.locals.allEwwdRecipes);
 });
 
+// update user's yumdRecipe count and recipe
+router.put('/userRecipe/:id', userController.updateUserYumdVotes, (req, res) => {
+  console.log('end of get user\'s yumd recipe update');
+  res.status(200).json(req.user);
+});
+
+// update user's ewwddRecipe count and recipe
+router.put('/userRecipe/:id', userController.updateUserEwwdVotes, (req, res) => {
+  console.log('end of get user\'s ewwd recipe update');
+  res.status(200).json(req.user);
+});
+
+
 
 module.exports = router;

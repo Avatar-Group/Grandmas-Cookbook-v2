@@ -6,6 +6,10 @@ const recipeSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
+  url: {
+    type: String,
+    required: false
+  },
   recipeTitle : {
     type: String,
     required: true
@@ -36,10 +40,11 @@ const recipeSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  recipeImage: {
-    data: Buffer,
-    contentType: String,
-  }
+  tastyId: {
+    type: Number,
+    default: undefined
+  },
+  imagePath: String
 });
 
 const Recipe = mongoose.model('recipe', recipeSchema);

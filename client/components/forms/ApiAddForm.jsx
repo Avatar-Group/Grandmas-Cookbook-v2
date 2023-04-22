@@ -15,6 +15,7 @@ function APIAddForm() {
     const [success, setSuccess] = React.useState(false);
     const cardArr = []
     
+    // handles toggling of "more details tab" for each recipe card
     const handleClose = () => {
       setOpen(false);
     };
@@ -26,6 +27,7 @@ function APIAddForm() {
         handleOpen();
         setQueryError(true);
         return () => {
+        // update database with new added recipe
         fetch('/recipe/add', 
             {method: 'POST', 
             body: JSON.stringify(recipe),
@@ -36,6 +38,7 @@ function APIAddForm() {
                 if (res.ok) return res.json();
                 throw new Error(res.status);
               })
+            // updates state in the cardSlice reducer by adding current data(recipe) as the payload
             .then(data => dispatch(addCard(data)))
             .then(() => handleClose())
             .catch(() => {
@@ -86,6 +89,7 @@ function APIAddForm() {
                 throw new Error(res.status);
             })
             .then((data) => {
+                // This loop allows only rendering of 5 recipes for results
                 for (let i = 0; i < 5; i++) {
                     const { title } = data[i];
                     cardArr.push(<RecipeCard key={title} type='addForm' recipe={data[i]} addHandler={addHandler} />)
