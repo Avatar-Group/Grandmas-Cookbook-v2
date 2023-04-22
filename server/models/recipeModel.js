@@ -24,7 +24,12 @@ const recipeSchema = new mongoose.Schema({
       required: true,
     },
   ],
-  ingredientList: [],
+  ingredientList: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
   yumdVote: {
     type: Number,
     default: 0,

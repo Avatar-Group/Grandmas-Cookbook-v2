@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 // https://mongoosejs.com/docs/schematypes.html#maps
 
 const userSchema = new mongoose.Schema({
+  googleId: {
+    type: String,
+  },
   email: {
     type: String,
     unique: true,
