@@ -30,7 +30,8 @@ function RecipeCard({ recipe, children, type, addHandler }) {
   const [deleteButton, setDeleteButton] = React.useState(true);
   const setDeleteButtonLogic = () => {
     setDeleteButton((prev) => !prev);
-    fetch(`/recipe/delete/${recipe.id}`, {
+    // MAYBE ADD USER ID TO THIS FETCH
+    fetch(`/recipe/delete/${recipe._id}`, {
       method: 'DELETE',
     })
     .then((res) => {

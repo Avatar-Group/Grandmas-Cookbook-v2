@@ -5,8 +5,10 @@ const cors = require('cors');
 const path = require('path');
 const passport = require('passport');
 const googleAuth = require('./auth/google')
-
+const connectDB = require('./config/db');
 require('dotenv').config();
+
+connectDB();
 
 const app = express();
 const port = 3000;
@@ -79,11 +81,13 @@ app.get('/logout', (req, res) => {
 app.use('/dist', express.static(path.join(__dirname, '../dist/')));
 
 // Route for all recipe related features
-const recipeRouter = require('./routes/recipeRoute');
 const tastyRouter = require('./routes/tastyRoute');
+const recipeRouter = require('./routes/mongoRecipeRoute');
+const userRouter = require('./routes/userRoute');
 
-app.use('/tasty', tastyRouter)
+app.use('/tasty', tastyRouter);
 app.use('/recipe', recipeRouter);
+app.use('/users', userRouter);
 
 // serve index.html on the route '/'.
 // The '/*' is to make sure refresh in browser works with frontend routing (https://ui.dev/react-router-cannot-get-url-refresh)
