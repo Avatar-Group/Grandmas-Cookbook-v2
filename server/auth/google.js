@@ -8,10 +8,12 @@ require('dotenv').config();
 
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {
+    console.log('serializeUser');
     done(null, user);
   });
 
   passport.deserializeUser((user, done) => {
+    console.log('deserializeUser');
     done(null, user);
   });
 
@@ -23,10 +25,10 @@ module.exports = (passport) => {
   },
   // this is the verify function of the strategy, which hanldes
   // the profile information gathered during oauth
-  ((request, accessToken, refreshToken, profile, done) => {
+  (async (request, accessToken, refreshToken, profile, done) => {
     console.log('verified!')
     console.log('here is the profile:', profile);
-    // User.findOrCreate({ googleId: profile.id }, (err, user) => done(err, user));
+    // User.findOrCreate({ googleId: profile.id , email: profile.email });
     done(null, profile);
   })
 

@@ -4,20 +4,25 @@ const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
 const passport = require('passport');
-const auth = require('./auth/auth')
+const googleAuth = require('./auth/google')
 
 require('dotenv').config();
 
 const app = express();
 const port = 3000;
 
-auth(passport);
+googleAuth(passport);
 
+const isDev = process.env.NODE_ENV === 'development'
+const baseurl = isDev ? 'http://localhost:8080/' : '';
+const successRedirect = `${baseurl}`;
+const failureRedirect = `${baseurl}/auth/failure`;
 
 app.use(session({ 
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  maxAge: 100000000
 }))
 app.use(passport.initialize());
 app.use(passport.session());
@@ -30,7 +35,7 @@ const isLoggedIn = (req, res, next) =>  req.user ? next() : res.sendStatus(401);
 
 // testing route for google oauth
 app.get('/auth', (req, res) => {
-  res.send('<a href="/auth/google">Authenticate with Google </a>')
+  res.send('<a href="/auth/google">Authenticate with Google</a>')
 });
 
 // when a get request is made to /auth/google, passport.authenticate redirects to google oauth
@@ -41,8 +46,8 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'prof
 // when all that is done, it calls the verify function in the GoogleStrategy passed to passport.use (auth.js)
 
 app.get('/google/callback', passport.authenticate('google', {
-  successRedirect: '/protected',
-  failureRedirect: '/auth/failure'
+  successRedirect,
+  failureRedirect
 }))
 
 
@@ -55,14 +60,19 @@ app.get('/auth/failure', (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  console.log('in logout');
-  // logs the user out
-  req.logout();
-  console.log('after logout')
-  // removes the current session
-  req.session.destroy();
-  console.log('after destroy');
-  res.send('Goodbye');
+  try {
+    console.log('in logout');
+    // logs the user out
+    req.logout((err) => {
+      if (err) throw Error(err);
+      res.status(200).json({ message: 'You logged out!' })
+    });
+    console.log('after logout')
+    // req.session.destroy();
+    res.send('Goodbye');
+  } catch (err) {
+    console.error(err);
+  }
 })
 
 // statically serve everything in the dist folder on the route '/dist'
