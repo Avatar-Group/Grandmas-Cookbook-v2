@@ -4,10 +4,12 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useDispatch } from 'react-redux';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import MoreButton from './recipeCardButtons/MoreButton.jsx';
 import { deleteCard } from '../slices/cardSlice';
 
@@ -52,11 +54,27 @@ function RecipeCard({ recipe, children, type, addHandler }) {
               Add
             </Button>
           ) : null}
+          <Tooltip title="Yum!">
+            <Button variant="contained" size="small">
+              <InsertEmoticonIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Eww!">
+            <Button variant="contained" size="small">
+              <SentimentVeryDissatisfiedIcon />
+            </Button>
+          </Tooltip>
           <MoreButton recipe={recipe} />
           {/* Add logic to only show delete for user's own recipes */}
-          <Button color="error" size="small" onClick={setDeleteButtonLogic}>
-            Delete
-          </Button>
+          <Tooltip title="Delete Recipe">
+            <Button
+              variant="contained"
+              size="small"
+              onClick={setDeleteButtonLogic}
+            >
+              <DeleteForeverIcon color="Red" />
+            </Button>
+          </Tooltip>
         </CardActions>
         {children}
       </Card>
