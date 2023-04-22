@@ -3,8 +3,8 @@ const recipeController = require('../controller/recipeController');
 
 
 // get all recipes from database
-router.get('/allRecipes', recipeController.getAllRecipes, (req, res) => {
-  console.log('end of get all recipes route');
+router.get('/all', recipeController.getAllRecipes, (req, res) => {
+
   res.status(200).json(res.locals.allRecipes);
 });
 
@@ -21,7 +21,7 @@ router.put('/updateRecipe/:userId/:recipeId', recipeController.updateRecipe, (re
 });
 
 // delete recipe from database & user's recipe list
-router.delete('/deleteRecipe/:userId/:recipeId', recipeController.deleteRecipe, (req, res) => {
+router.delete('/delete/:recipeId', recipeController.deleteRecipe, (req, res) => {
   console.log('end of delete recipe route');
   res.status(200).json('The recipe has been successfully deleted.');
 });

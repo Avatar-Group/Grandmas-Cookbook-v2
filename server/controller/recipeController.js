@@ -5,13 +5,21 @@ const User = require('../models/userModel');
 const recipeController = {};
 
 // get all recipes
-recipeController.getAllRecipes = (req, res, next) => {
-  Recipe.find({}, (err, recipes) => {
-    if (err) return next(`Error in recipeController.getAllRecipes: ${JSON.stringify(err)}`);
-
-    res.locals.allRecipes = recipes;
+recipeController.getAllRecipes = async (req, res, next) => {
+  
+  try {
+    const getRecipes = await Recipe.find({});
+    
+    res.locals.allRecipes = getRecipes;
     return next();
-  })
+  }
+  catch(err) {
+    return next({
+      message: { err: 'error in get all recipes'}
+    })
+  }
+  
+  
 };
 
 // add a recipe to database
@@ -22,11 +30,10 @@ recipeController.addNewRecipe = async (req, res, next) => {
     // make sure to also add to user's obj of recipes
     const { 
       url,
-      recipeTitle, 
+      title, 
       description, 
       directions, 
-      ingredientName, 
-      ingredientMeasurement,
+      ingredientList, 
       tastyId, 
       imagePath 
     } = req.body;
@@ -37,7 +44,7 @@ recipeController.addNewRecipe = async (req, res, next) => {
     // console.log("Ingredient Name:", req.body.ingredients[0].name)
     // console.log('IngredientMeasurement', req.body.ingredients[0].measurement)
     // check if input fields are properly filled
-    if (!recipeTitle || !directions || !req.body.ingredients[0].name || !req.body.ingredients[0].measurement) {
+    if (!title || !directions || !ingredientList) {
       res.status(404);
       return next({
         log: 'error in recipeController.addRecipe',
@@ -52,33 +59,24 @@ recipeController.addNewRecipe = async (req, res, next) => {
     // declare input for new recipe
     const newRecipe = {
       // createdBy: user._id
-      createdBy: "helloworld",
-      // eslint-disable-next-line object-shorthand
-      url: url,
-      // eslint-disable-next-line object-shorthand
-      recipeTitle: recipeTitle,
-      // eslint-disable-next-line object-shorthand
-      description: description,
-      // eslint-disable-next-line object-shorthand
-      directions: directions,
-      ingredients: [{
-        name: req.body.ingredients[0].name,
-        measurement: req.body.ingredients[0].measurement
-      }],
-      // eslint-disable-next-line object-shorthand
-      tastyId: tastyId,
+      url,
+      title,
+      description,
+      directions,
+      ingredientList,
+      tastyId,
       imagePath: res.locals.awsimagePath || imagePath,
     };
-    console.log(`hello from above newRecipe.save`);
-    console.log(`newRcipe: ${JSON.stringify(newRecipe)}`);
+    
     // create query to add to the database
     const recipe = await Recipe.create(newRecipe);
-    console.log(`hello from below newRecipe.save`);
+    
     res.locals.newRecipe = recipe;
-    console.log(`hello from end of try block, addrecipe`);
+    
     return next();
   }
   catch(err) {
+    console.log(err);
     return next({
       log: 'error in recipeController.addRecipe',
       message: { err: 'failed to add a new recipe to database' }
@@ -96,31 +94,22 @@ recipeController.updateRecipe = async (req, res, next) => {
 
     const { 
       url, 
-      recipeTitle, 
+      title, 
       description, 
       directions, 
-      // ingredientName, 
-      // ingredientMeasurement, 
+      ingredientList,
       tastyId,
       imagePath 
     } = req.body;
 
     const update = {
       createdBy: user._id,
-      // eslint-disable-next-line object-shorthand
-      url: url,
-            // eslint-disable-next-line object-shorthand
-      recipeTitle: recipeTitle,
-      // eslint-disable-next-line object-shorthand
-      description: description,
-      // eslint-disable-next-line object-shorthand
-      directions: directions,
-      ingredients: [{
-        name: req.body.ingredients[0].name,
-        measurement: req.body.ingredients[0].measurement,
-      }],
-      // eslint-disable-next-line object-shorthand
-      tastyId: tastyId,
+      url,
+      title,
+      description,
+      directions,
+      ingredientList,
+      tastyId,
       imagePath: res.locals.awsimagePath || imagePath,
     };
   
@@ -143,7 +132,8 @@ recipeController.updateRecipe = async (req, res, next) => {
 
 // delete a recipe from user's profile & database
 recipeController.deleteRecipe = async (req, res, next) => {
-  const { userId, recipeId } = req.params;
+  const { recipeId, userId } = req.params;
+  
 
   try {
     // query for recipe ID by userID
@@ -153,7 +143,7 @@ recipeController.deleteRecipe = async (req, res, next) => {
     });
 
     if (deleteRecipe) {
-      res.local.delete = {
+      res.locals.delete = {
         success: true,
         message: 'Recipe deleted successfully',
         data: deleteRecipe,

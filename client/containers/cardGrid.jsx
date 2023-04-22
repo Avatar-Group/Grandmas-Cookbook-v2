@@ -57,10 +57,10 @@ function CardGrid() {
 
   useEffect(() => {
     setFilteredRecipes(
-      recipes.filter((recipe) => {
+      recipes.filter((recipe) => 
         // console.log(recipe)
-        return recipe.title.toLowerCase().includes(filterKeyword.toLowerCase())
-    })
+         recipe.title.toLowerCase().includes(filterKeyword.toLowerCase())
+    )
     );
   }, [recipes, filterKeyword]);
 
@@ -88,7 +88,7 @@ function CardGrid() {
               <Container className="classes.cardGrid">
                 <Grid container spacing={3}>
                   {filteredRecipes.map((card) => (
-                    <Grid item key={card.id} xs={12} sm={4} md={3}>
+                    <Grid item key={card._id} xs={12} sm={4} md={3}>
                       <Card
                         sx={{
                           height: '100%',

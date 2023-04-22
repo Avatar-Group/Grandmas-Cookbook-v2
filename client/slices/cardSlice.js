@@ -40,14 +40,14 @@ const cardSlice = createSlice({
             // Within the recipe key of tempState, we will map through the recipe array (all of the recipes on the stream)
             // if the recipe id at the current index matches the passed in payload, return the payload, then return recipe, which will update the recipe in state
             tempState.recipes = tempState.recipes.map((recipe) => {
-                if (recipe.id === payload.id) return payload;
+                if (recipe._id === payload._id) return payload;
                 return recipe;
             })
         },
         deleteCard: (state, param) => {
             const { payload } = param;
             const tempState = state;
-            tempState.recipes = tempState.recipes.filter((recipe) => recipe.id !== payload.id)
+            tempState.recipes = tempState.recipes.filter((recipe) => recipe._id !== payload._id)
         }
     }
 })
