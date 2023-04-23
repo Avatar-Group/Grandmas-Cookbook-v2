@@ -4,6 +4,8 @@ const path = require('path');
 const connectDB = require('./config/db');
 require('dotenv').config();
 
+// console.log(process.env) // remove this after you've confirmed it is working
+
 connectDB();
 
 const app = express();
@@ -19,10 +21,12 @@ app.use('/dist', express.static(path.join(__dirname, '../dist/')));
 const tastyRouter = require('./routes/tastyRoute');
 const recipeRouter = require('./routes/mongoRecipeRoute');
 const userRouter = require('./routes/userRoute');
+const pinRouter = require('./routes/pinRoute');
 
 app.use('/tasty', tastyRouter);
 app.use('/recipe', recipeRouter);
 app.use('/users', userRouter);
+app.use('/pinterest', pinRouter);
 
 // serve index.html on the route '/'.
 // The '/*' is to make sure refresh in browser works with frontend routing (https://ui.dev/react-router-cannot-get-url-refresh)
