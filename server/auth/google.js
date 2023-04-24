@@ -27,18 +27,16 @@ module.exports = (passport) => {
   // the profile information gathered during oauth
   (async (request, accessToken, refreshToken, profile, done) => {
     try {
-      console.log('verified!')
-      console.log('here is the profile:', profile);
+      // console.log('verified!')
+      // console.log('here is the profile:', profile);
       const user = await User.findOne({ googleId: profile.id , email: profile._json.email });
-      const newUser = { googleId: profile.id, email: profile._json.email }
-      console.log('here is the new user', newUser);
-      if (!user) await User.create(newUser)
+      if (!user) await User.create({ googleId: profile.id, email: profile._json.email });
       done(null, profile);
     } catch (err) {
       console.error(err);
       done(err);
     }
-  })
+  }),
 
   ))
 };

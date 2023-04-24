@@ -38,6 +38,11 @@ router.put('/userRecipe/:id', userController.updateUserEwwdVotes, (req, res) => 
   res.status(200).json(req.user);
 });
 
+router.get('/logout', userController.logout, (req, res) => {
+  console.log('end of user/logout route')
+  res.status(200).redirect('http://localhost:8080/')
+})
+
 
 
 module.exports = router;
