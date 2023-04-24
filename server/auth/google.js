@@ -1,19 +1,19 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 require('dotenv').config();
-// const User = require('../models/userModel')
+const User = require('../models/userModel')
 
 
 // https://www.youtube.com/watch?v=Q0a0594tOrc
 
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {
-    console.log('serializeUser');
+    // console.log('serializeUser', user);
     done(null, user);
   });
 
   passport.deserializeUser((user, done) => {
-    console.log('deserializeUser');
+    // console.log('deserializeUser', user);
     done(null, user);
   });
 
@@ -26,10 +26,18 @@ module.exports = (passport) => {
   // this is the verify function of the strategy, which hanldes
   // the profile information gathered during oauth
   (async (request, accessToken, refreshToken, profile, done) => {
-    console.log('verified!')
-    console.log('here is the profile:', profile);
-    // User.findOrCreate({ googleId: profile.id , email: profile.email });
-    done(null, profile);
+    try {
+      console.log('verified!')
+      console.log('here is the profile:', profile);
+      const user = await User.findOne({ googleId: profile.id , email: profile._json.email });
+      const newUser = { googleId: profile.id, email: profile._json.email }
+      console.log('here is the new user', newUser);
+      if (!user) await User.create(newUser)
+      done(null, profile);
+    } catch (err) {
+      console.error(err);
+      done(err);
+    }
   })
 
   ))
