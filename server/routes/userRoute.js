@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const userController = require('../controller/userController');
+const baseurl = require('../server');
 
 
 // get all of user's recipe
@@ -37,6 +38,11 @@ router.put('/userRecipe/:id', userController.updateUserEwwdVotes, (req, res) => 
   console.log('end of get user\'s ewwd recipe update');
   res.status(200).json(req.user);
 });
+
+router.get('/logout', userController.logout, (req, res) => {
+  console.log('end of user/logout route')
+  res.status(200).redirect(baseurl)
+})
 
 
 
