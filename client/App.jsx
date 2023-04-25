@@ -52,7 +52,7 @@ function App() {
       <div className="testing-section">
         <h1>START TEST SECTION</h1>
         <h3>HELLOOOO</h3>
-        <NewRecipeForm />
+        
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ const cardSlice = createSlice({
         addCard: (state, param) => {
             // destructure param as the change and assign it to variable payload
             const { payload } = param;
-            // We're not suppose to direction change state, however, we can manipulate a copy of state. So we declare a new instance of state and assign it to current state.
+            // We're not suppose to directly change state, however, we can manipulate a copy of state. So we declare a new instance of state and assign it to current state.
             const tempState = state;
             // fetch('/recipe/add', 
             //     {method: 'POST', 
@@ -54,4 +54,4 @@ const cardSlice = createSlice({
 
 const { actions, reducer } = cardSlice;
 export const { init, addCard, updateCard, deleteCard } = actions;
-export default reducer
+export default reducer;
