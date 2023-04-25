@@ -16,9 +16,9 @@ const port = 3000;
 googleAuth(passport);
 
 const isDev = process.env.NODE_ENV === 'development'
-const baseurl = isDev ? 'http://localhost:8080/' : '';
+const baseurl = isDev ? 'http://localhost:8080/' : '/';
 const successRedirect = `${baseurl}`;
-const failureRedirect = `${baseurl}/auth/failure`;
+const failureRedirect = `${baseurl}auth/failure`;
 
 app.use(cors());
 app.use(express.json());
@@ -52,31 +52,6 @@ app.get('/google/callback', passport.authenticate('google', {
   successRedirect,
   failureRedirect
 }))
-
-
-// app.get('/protected', isLoggedIn, (req, res) => {
-//   res.send(`Hello, ${req.user.displayName}`)
-// });
-
-// app.get('/auth/failure', (req, res) => {
-//   res.send('Authentication FAILED');
-// });
-
-// app.get('/logout', (req, res) => {
-//   try {
-//     console.log('in logout');
-//     // logs the user out
-//     req.logout((err) => {
-//       if (err) throw Error(err);
-//       res.status(200).json({ message: 'You logged out!' })
-//     });
-//     console.log('after logout')
-//     // req.session.destroy();
-//     res.send('Goodbye');
-//   } catch (err) {
-//     console.error(err);
-//   }
-// })
 
 // statically serve everything in the dist folder on the route '/dist'
 app.use('/dist', express.static(path.join(__dirname, '../dist/')));
@@ -116,3 +91,6 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
+
+
+module.exports = baseurl;
