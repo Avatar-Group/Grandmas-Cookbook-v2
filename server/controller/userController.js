@@ -167,5 +167,37 @@ userController.updateUserEwwdVotes = async (req, res, next) => {
   };
 };
 
+userController.isLoggedIn = async (req, res, next) => {
+  try {
+    if (req.user) return next();
+    // maybe redirect to /login or something?
+    return res.sendStatus(401);
+  } catch (err) {
+      return next({
+        log: 'error with user verification, check userController.isLoggedIn',
+        message: { err: 'User not verified'}
+      })
+  }
+}
+
+userController.logout = async (req, res, next) => {
+  console.log('in userController.logout');
+  console.log('req.user before logout', req.user)
+  try {
+    req.logout((err) => {
+      if (err) throw Error(err);
+      // console.log('user is logged out!');
+      // return next()
+    })
+    console.log('req.user after logout', req.user)
+    return next();
+  } catch (err) {
+    return next({
+      log: 'error with user logout, check userController.logout',
+      message: { err: 'User did not log out' }
+    })
+  }
+}
+
 
 module.exports = userController;
