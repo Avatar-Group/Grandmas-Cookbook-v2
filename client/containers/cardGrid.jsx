@@ -1,23 +1,10 @@
 import React, { useEffect } from 'react';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import {
-  Typography,
-  AppBar,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Button,
-  Grid,
-  Container,
-  TextField,
-} from '@mui/material';
+import { Card, Button, Grid, Container, TextField } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import RecipeCard from '../components/recipeCard.jsx';
 import AddRecipeModal from '../components/addRecipePage/AddRecipeModal.jsx';
 import { init } from '../slices/cardSlice';
-import { clearKeywordResult } from '../slices/modalSlice.js';
+import { clearKeywordResult } from '../slices/modalSlice';
 
 function CardGrid() {
   const dispatch = useDispatch();
@@ -34,14 +21,13 @@ function CardGrid() {
   // Two handlers for open and close the add recipe modal.
   const handleCloseAddRecipe = () => {
     setOpenAddRecipe(false);
-    dispatch(clearKeywordResult())
+    dispatch(clearKeywordResult());
   };
   const handleOpenAddRecipe = () => {
     setOpenAddRecipe(true);
   };
 
-    const { recipes } = useSelector(state=>state.card)
-   
+  const { recipes } = useSelector((state) => state.card);
 
   useEffect(() => {
     fetch('/recipe/all', { method: 'GET' })
@@ -57,10 +43,10 @@ function CardGrid() {
 
   useEffect(() => {
     setFilteredRecipes(
-      recipes.filter((recipe) => 
+      recipes.filter((recipe) =>
         // console.log(recipe)
-         recipe.title.toLowerCase().includes(filterKeyword.toLowerCase())
-    )
+        recipe.title.toLowerCase().includes(filterKeyword.toLowerCase())
+      )
     );
   }, [recipes, filterKeyword]);
 
@@ -70,7 +56,11 @@ function CardGrid() {
         <Container maxWidth="lg">
           <Grid container spacing={2}>
             <Grid item xs={12} sx={{ textAlign: 'center' }}>
-              <Button variant="contained" onClick={handleOpenAddRecipe} sx={{marginTop: '16px'}}>
+              <Button
+                variant="contained"
+                onClick={handleOpenAddRecipe}
+                sx={{ marginTop: '16px' }}
+              >
                 Get New Recipe
               </Button>
             </Grid>
@@ -96,7 +86,11 @@ function CardGrid() {
                           flexDirection: 'column',
                         }}
                       >
-                        <RecipeCard recipe={card} title={card.title} image={card.imagePath} />
+                        <RecipeCard
+                          recipe={card}
+                          title={card.title}
+                          image={card.imagePath}
+                        />
                       </Card>
                     </Grid>
                   ))}

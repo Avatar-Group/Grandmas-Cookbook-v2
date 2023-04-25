@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
@@ -6,9 +6,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateCard } from '../../slices/cardSlice';
+import { useDispatch } from 'react-redux';
 import { Tooltip } from '@mui/material';
+import { updateCard } from '../../slices/cardSlice';
 
 export default function MoreButton({ recipe }) {
   const [open, setOpen] = React.useState(false);
@@ -101,8 +101,9 @@ export default function MoreButton({ recipe }) {
           variant="contained"
           size="small"
           onClick={handleClickOpen('paper')}
+          sx={{ minWidth: '25px' }}
         >
-          <ReadMoreIcon />
+          <ReadMoreIcon sx={{ color: 'black' }} />
         </Button>
       </Tooltip>
       <Dialog

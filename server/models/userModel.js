@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const mongoose = require('mongoose');
 // eslint-disable-next-line import/no-import-module-exports
-// const Recipe = require('./recipeModel') ;
+const Recipe = require('./recipeModel');
 // https://mongoosejs.com/docs/schematypes.html#maps
 
 const userSchema = new mongoose.Schema({
@@ -16,29 +16,17 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
   },
-
   postedRecipes: {
     type: Map,
-    of: mongoose.Schema.Types.ObjectId,
-    ref: 'Recipe',
+    of: Recipe.schema,
   },
   yumdRecipes: {
     type: Map,
-    of: mongoose.Schema.Types.ObjectId,
-    ref: 'Recipe',
+    of: Recipe.schema,
   },
   ewwdRecipes: {
     type: Map,
-    of: mongoose.Schema.Types.ObjectId,
-    ref: 'Recipe',
-  },
-  userYumdVotes: {
-    type: Number,
-    default: 0,
-  },
-  userEwwdVotes: {
-    type: Number,
-    default: 0,
+    of: Recipe.schema,
   },
 });
 

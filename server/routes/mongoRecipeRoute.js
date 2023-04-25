@@ -41,8 +41,8 @@ router.delete(
 );
 
 // increment yumdVote count for recipe
-router.post(
-  '/updateRecipe/:recipeId',
+router.patch(
+  '/yumRecipe/:recipeId',
   recipeController.upVoteRecipe,
   (req, res) => {
     console.log('end of up vote recipe route');
@@ -51,8 +51,8 @@ router.post(
 );
 
 // increment ewwdVote count for recipe
-router.post(
-  '/updateRecipe/:recipeId',
+router.patch(
+  '/ewwRecipe/:recipeId',
   recipeController.downVoteRecipe,
   (req, res) => {
     console.log('end of down vote recipe route');
