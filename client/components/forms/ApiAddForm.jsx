@@ -105,11 +105,43 @@ function APIAddForm() {
     };
 
     return (
-        <Box>
+        <Box
+            sx={{
+                '& > :not(style)': { m: 1, width: '70ch' },
+                display: 'flex', 
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}
+        >
              {queryError ? <Alert severity="error" style={{border: 'black 5px', background: '#DDBEA9'}}>Could not complete the search</Alert> : null}
-            <TextField id="tagsField" label='tags' inputRef={tagFieldValue}/>
-            <TextField id="keywordField" label='keywords' inputRef={keywordFieldValue}/>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <TextField 
+                sx={{
+                    width: {sm: 300, md: 600},
+                    md: 2,
+                    boxShadow: 7
+                }}
+                id="tagsField" 
+                label='tags' 
+                inputRef={tagFieldValue}
+            />
+            <TextField 
+                sx={{
+                    width: {sm: 300, md: 600},
+                    md: 2,
+                    boxShadow: 4
+                }}
+                id="keywordField" 
+                label='keywords' 
+                inputRef={keywordFieldValue}
+            />
+            <Button 
+                sx={{
+                    boxShadow: 4,
+                    borderRadius: 5
+                }}
+                onClick={handleSubmit}
+            >Submit</Button>
             {keywordResults}
            
             <Backdrop

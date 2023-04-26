@@ -19,15 +19,18 @@ const userSchema = new mongoose.Schema({
 
   postedRecipes: {
     type: Map,
-    of: Recipe.schema,
+    of: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe',
   },
   yumdRecipes: {
     type: Map,
-    of: Recipe.schema,
+    of: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe',
   },
   ewwdRecipes: {
     type: Map,
-    of: Recipe.schema,
+    of: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe',
   },
   // userYumdVotes: {
   //   type: Number,

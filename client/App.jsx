@@ -9,6 +9,7 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CardGrid from './containers/cardGrid.jsx';
 import NewRecipeForm from './components/forms/NewRecipeForm.jsx';
+import './index.css';
 
 const theme = createTheme({
   palette: {
@@ -49,11 +50,6 @@ function App() {
         </header>
         <CardGrid />
       </ThemeProvider>
-      <div className="testing-section">
-        <h1>START TEST SECTION</h1>
-        <h3>HELLOOOO</h3>
-        
-      </div>
     </div>
   );
 }

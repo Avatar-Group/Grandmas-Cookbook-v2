@@ -24,7 +24,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/base": "^5.0.0-alpha.124",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.11.16",
+    "@mui/material": "^5.12.2",
     "@mui/styled-engine-sc": "^5.11.11",
     "@reduxjs/toolkit": "^1.9.3",
     "aws-sdk": "^2.1354.0",

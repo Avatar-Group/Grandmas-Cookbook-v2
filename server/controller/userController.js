@@ -119,10 +119,9 @@ userController.updateUserYumdVotes = async (req, res, next) => {
 
   try {
     const user = await User.findById(userId);
-    const recipe = user.postedRecipes.get(recipeId)
 
     // add recipe to yumdRecipe field
-    user.yumdRecipes.set(recipeId, recipe);
+    user.yumdRecipes.set(recipeId, recipeId);
 
     // increment user yumd vote 
     user.userYumdVotes += 1;
@@ -146,10 +145,9 @@ userController.updateUserEwwdVotes = async (req, res, next) => {
 
   try {
     const user = await User.findById(userId);
-    const recipe = user.postedRecipes.get(recipeId)
 
     // add recipe to ewwdRecipe field
-    user.ewwdRecipes.set(recipeId, recipe);
+    user.ewwdRecipes.set(recipeId, recipeId);
 
     // increment user ewwd vote 
     user.userEwwdVotes += 1;
@@ -163,6 +161,28 @@ userController.updateUserEwwdVotes = async (req, res, next) => {
     return next({
       log: 'error with updating ewwd votes for user\'s recipe',
       message: { err: 'Unable to eww a recipe' },
+    });
+  };
+};
+
+// update user's posted recipes
+userController.updateUserPostedRecipes = async (req, res, next) => {
+  const { userId, recipeId} = req.params;
+  try {
+    const user = await User.findById(userId);
+
+    // add recipe to user's profile
+    user.postedRecipes.set(recipeId, recipeId);
+
+    await user.save();
+
+    req.user = user;
+    return next();
+  }
+  catch (err) {
+    return next({
+      log: 'Error adding recipe to user\'s profile',
+      message: { err: 'Unable to add recipe'}
     });
   };
 };
