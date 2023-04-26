@@ -4,10 +4,13 @@ const helpers = require('../helpers');
 
 const server = 'http://localhost:3000';
 
+// persist recipe id that was created
+var testId;
+
 // parent test describe block
 describe('Route integration', () => {
   // start with the /recipe route
-  describe('/recipe', () => {
+  describe('/recipe', () => { 
 
     describe('GET to /getAllRecipes', () => {
       it('responds with 200 status and return res.locals.allRecipes to the front end', () => {
@@ -52,6 +55,8 @@ describe('Route integration', () => {
           .expect(200)
           .then(resp => {
             const example = resp.body;
+            testId = resp.body._id;  // needa use it for PUT and DELETE
+            console.log('id seen in POST block: ', testId);  
             expect(typeof example).toEqual('object');
             expect(
               Object.hasOwn(example, 'title') && 
@@ -64,13 +69,14 @@ describe('Route integration', () => {
               && Object.hasOwn(example, 'tastyId')  
               ).toBe(true);
           });
+          console.log('after POST block: ', testId); 
       });
 
     });
 
-    // describe('PUT to /update', () => {
-    //   console.log('id seen in PUT block: ', test_id);
-    // });
+    xdescribe(`PUT to /update/${testId}`, () => {  
+      console.log('id seen in PUT block: ', testId);  
+    });
 
   })
 })
