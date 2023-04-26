@@ -56,6 +56,26 @@ userController.deleteUserPostedRecipe = async (req, res, next) => {
     });
   }
 };
+// update user's posted recipes
+userController.updateUserPostedRecipes = async (req, res, next) => {
+  const { recipeId } = req.params;
+  try {
+    const user = await User.findOne({ googleId: req.user.id });
+
+    // add recipe to user's profile
+    user.postedRecipes.set(recipeId, recipeId);
+
+    await user.save();
+
+    req.user = user;
+    return next();
+  } catch (err) {
+    return next({
+      log: "Error adding recipe to user's profile",
+      message: { err: 'Unable to add recipe' },
+    });
+  }
+};
 
 // delete recipe from user's yumdRecipes
 userController.deleteUserYumdRecipe = async (req, res, next) => {

@@ -28,7 +28,7 @@ export default function AddRecipeModal({ open, handleClose }) {
     >
       <Box sx={boxStyle}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          Get New Recipe
+          Recipes
         </Typography>
         <AddRecipeTab />
       </Box>
