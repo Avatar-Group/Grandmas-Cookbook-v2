@@ -1,9 +1,9 @@
 const { createSlice } = require('@reduxjs/toolkit');
 
 const fakeUser = {
-  _id: '6445e4fa41d2e2a932a66379',
-  googleId: '101688260153426330032',
-  email: 'mjway01@gmail.com',
+  _id: '644886ee599ee2c3e0729155',
+  googleId: '109839504910373242832',
+  email: 'sam.r.blackburn@gmail.com',
   postedRecipes: {},
   yumdRecipes: {},
   ewwdRecipes: {},
@@ -11,24 +11,28 @@ const fakeUser = {
 };
 const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    user: fakeUser,
-  },
+  initialState: fakeUser,
   reducers: {
     // init user (mongo _id)
     initUser: (state, param) => {
       const { payload } = param;
       const tempState = state;
-      tempState.user._id = { ...state.user._id, ...payload };
+      tempState._id = { ...state.user._id, ...payload };
+    },
+    // user logged in
+    userLoggedIn: (state, param) => {
+      const { payload } = param;
+      const tempState = state;
+      tempState.loggedIn = true;
     },
     // created recipes
     createUserRecipe: (state, param) => {
       const { payload } = param;
       const newRecipe = {};
-      newRecipe[payload._id] = payload;
+      newRecipe[payload._id] = payload._id;
       const tempState = state;
-      tempState.user.postedRecipes = {
-        ...state.user.postedRecipes,
+      tempState.postedRecipes = {
+        ...state.postedRecipes,
         ...newRecipe,
       };
     },
@@ -36,34 +40,34 @@ const userSlice = createSlice({
     addYumdRecipe: (state, param) => {
       const { payload } = param;
       const newRecipe = {};
-      newRecipe[payload._id] = payload;
+      newRecipe[payload._id] = payload._id;
       const tempState = state;
-      tempState.user.yumdRecipes = { ...state.user.yumdRecipes, ...newRecipe };
+      tempState.yumdRecipes = { ...state.yumdRecipes, ...newRecipe };
     },
     // eww'd recipes
     addEwwdRecipe: (state, param) => {
       const { payload } = param;
       const newRecipe = {};
-      newRecipe[payload._id] = payload;
+      newRecipe[payload._id] = payload._id;
       const tempState = state;
-      tempState.user.ewwdRecipes = { ...state.user.ewwdRecipes, ...newRecipe };
+      tempState.ewwdRecipes = { ...state.ewwdRecipes, ...newRecipe };
     },
     // unyymm'd recipes
     deleteYumdRecipe: (state, param) => {
       const { payload } = param;
       const tempState = state;
-      delete tempState.user.yumdRecipes[payload._id];
+      delete tempState.yumdRecipes[payload._id];
     },
     // uneww'd recipes
     deleteEwwdRecipe: (state, param) => {
       const { payload } = param;
       const tempState = state;
-      delete tempState.user.ewwdRecipes[payload._id];
+      delete tempState.ewwdRecipes[payload._id];
     },
     deleteUserRecipe: (state, param) => {
       const { payload } = param;
       const tempState = state;
-      delete tempState.user.recipes[payload._id];
+      delete tempState.recipes[payload._id];
     },
   },
 });

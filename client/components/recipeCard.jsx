@@ -21,37 +21,46 @@ import {
 
 function RecipeCard({ recipe, children, type, addHandler }) {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state);
 
-  const setDeleteButtonLogic = () => {
-    fetch(`/recipe/delete/${recipe._id}`, {
-      method: 'DELETE',
-    })
-      .then((res) => {
-        if (res.ok) {
-          dispatch(deleteCard(recipe));
-          dispatch(deleteUserRecipe(recipe));
-          return;
-        }
-        throw new Error(res.status);
-      })
-      .catch((err) => console.log(`Error code: ${err}`));
+  const setDeleteButtonLogic = async () => {
+    try {
+      const recipeRes = await fetch(`/recipe/delete/${recipe._id}`, {
+        method: 'DELETE',
+      });
+      const userRes = await fetch(`/user/postedRecipe/${recipe._id}`, {
+        method: 'DELETE',
+      });
+      if (recipeRes.ok && userRes.ok) {
+        dispatch(deleteCard(recipe));
+        dispatch(deleteUserRecipe(recipe));
+        return;
+      }
+      throw new Error(recipeRes.status + userRes.status);
+    } catch (err) {
+      console.log(`Error code: ${err}`);
+    }
   };
 
-  const voteRecipe = (voteType) => {
-    fetch(`/recipe/${voteType}Recipe/${recipe._id}`, {
-      method: 'PATCH',
-    })
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw new Error(res.status);
-      })
-      .then((data) => {
-        dispatch(updateCard(data));
-        if (voteType === 'yum') dispatch(addYumdRecipe(recipe));
-        else dispatch(addEwwdRecipe(recipe));
-      })
-      .catch((err) => console.log(`Error code: ${err}`));
+  const voteRecipe = async (voteType) => {
+    try {
+      const recipeRes = await fetch(`/recipe/${voteType}Recipe/${recipe._id}`, {
+        method: 'PATCH',
+      });
+      const userRes = await fetch(`/user/${voteType}Recipe/${recipe._id}`, {
+        method: 'PUT',
+      });
+      if (recipeRes.ok && userRes.ok) {
+        const updatedRecipe = await recipeRes.json();
+        dispatch(updateCard(updatedRecipe));
+        if (voteType === 'yum') dispatch(addYumdRecipe(updatedRecipe));
+        else dispatch(addEwwdRecipe(updatedRecipe));
+        return;
+      }
+      throw new Error(recipeRes.status + userRes.status);
+    } catch (err) {
+      console.log(`Error code: ${err}`);
+    }
   };
 
   return (
@@ -94,8 +103,8 @@ function RecipeCard({ recipe, children, type, addHandler }) {
           <Tooltip title="Eww!">
             <Button
               disabled={
-                Object.hasOwn(user.ewwdRecipes, recipe._id) ||
-                Object.hasOwn(user.yumdRecipes, recipe._id)
+                Object.hasOwn(user.yumdRecipes, recipe._id) ||
+                Object.hasOwn(user.ewwdRecipes, recipe._id)
               }
               variant="contained"
               size="small"
@@ -107,7 +116,7 @@ function RecipeCard({ recipe, children, type, addHandler }) {
             </Button>
           </Tooltip>
           <MoreButton recipe={recipe} />
-          {user.postedRecipes[recipe._id] && (
+          {Object.hasOwn(user.postedRecipes, recipe._id) && (
             <Tooltip title="Delete Recipe">
               <Button
                 variant="contained"

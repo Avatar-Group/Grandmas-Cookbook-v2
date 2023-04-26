@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Tooltip } from '@mui/material';
 import { updateCard } from '../../slices/cardSlice';
 
@@ -14,21 +14,10 @@ export default function MoreButton({ recipe }) {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState('paper');
 
-  //   useEffect(() => {
-  //     if (page) dispatch(getPosts(page));
-  // }, [canEdit, page]);
-
-  //   useEffect(() =>
-  //     if (page) dispatch(getPosts(page));
-  // }, [dispatch, page]);
-
   const dispatch = useDispatch();
 
   const [saveEditButton, setSaveEditButton] = React.useState('Edit');
   const [canEdit, setCanEdit] = React.useState(false);
-
-  // const [ingredientList, setIngredientList] = React.useState(recipe.ingredientList ? recipe.ingredientList.join('\n') : '');
-  // const [directions, setDirections] = React.useState(recipe.direction ? recipe.directions.join('\n') : '');
 
   function setSaveEditButtonLogic() {
     if (saveEditButton === 'Edit') {
@@ -40,10 +29,6 @@ export default function MoreButton({ recipe }) {
 
   const canEditLogic = () => {
     if (canEdit) {
-      // console.log(
-      //   'ingredientText',
-      //   document.getElementById(`${recipe.id}ingredientText`).textContent
-      // );
       setSaveEditButton('Edit');
       fetch(`/recipe/update/${recipe._id}`, {
         method: 'PUT',
@@ -66,7 +51,6 @@ export default function MoreButton({ recipe }) {
           throw new Error(res.status);
         })
         .then((data) => {
-          // console.log(data);
           // setting updated recipe information to the cardSlice file
           dispatch(updateCard(data));
         })

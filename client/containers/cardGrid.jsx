@@ -1,5 +1,13 @@
 import React, { useEffect } from 'react';
-import { Card, Button, Grid, Container, TextField } from '@mui/material';
+import {
+  Card,
+  Button,
+  Grid,
+  Container,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+} from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import RecipeCard from '../components/recipeCard.jsx';
 import AddRecipeModal from '../components/addRecipePage/AddRecipeModal.jsx';
@@ -8,9 +16,19 @@ import { clearKeywordResult } from '../slices/modalSlice';
 
 function CardGrid() {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state);
+  const { recipes } = useSelector((state) => state.card);
+
   // States to support live filtering of the recipes
   const [filteredRecipes, setFilteredRecipes] = React.useState([]);
   const [filterKeyword, setFilterKeyword] = React.useState('');
+
+  // Stuff to switch what set of recipes is displaying
+  const [recipeSet, setRecipeSet] = React.useState('all');
+
+  const handleRecipeSet = (event, newRecipeSet) => {
+    setRecipeSet(newRecipeSet);
+  };
 
   // State to support the add recipe modal.
   const [openAddRecipe, setOpenAddRecipe] = React.useState(false);
@@ -27,8 +45,6 @@ function CardGrid() {
     setOpenAddRecipe(true);
   };
 
-  const { recipes } = useSelector((state) => state.card);
-
   useEffect(() => {
     fetch('/recipe/all', { method: 'GET' })
       .then((res) => {
@@ -42,13 +58,26 @@ function CardGrid() {
   }, []);
 
   useEffect(() => {
-    setFilteredRecipes(
-      recipes.filter((recipe) =>
-        // console.log(recipe)
-        recipe.title.toLowerCase().includes(filterKeyword.toLowerCase())
-      )
+    let tempRecipes = recipes;
+    tempRecipes = tempRecipes.filter((recipe) => {
+      switch (recipeSet) {
+        case 'all':
+          return true;
+        case 'mine':
+          return Object.hasOwn(user.postedRecipes, recipe._id);
+        case 'yumd':
+          return Object.hasOwn(user.yumdRecipes, recipe._id);
+        case 'ewwd':
+          return Object.hasOwn(user.ewwdRecipes, recipe._id);
+        default:
+          return true;
+      }
+    });
+    tempRecipes = tempRecipes.filter((recipe) =>
+      recipe.title.toLowerCase().includes(filterKeyword.toLowerCase())
     );
-  }, [recipes, filterKeyword]);
+    setFilteredRecipes(tempRecipes);
+  }, [recipes, filterKeyword, recipeSet]);
 
   return (
     <main>
@@ -64,6 +93,7 @@ function CardGrid() {
                 Get New Recipe
               </Button>
             </Grid>
+
             <Grid item xs={12} sx={{ textAlign: 'center' }}>
               <TextField
                 label="Find Your Recipe"
@@ -74,7 +104,41 @@ function CardGrid() {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={1} sx={{ textAlign: 'center' }}>
+              <ToggleButtonGroup
+                orientation="vertical"
+                value={recipeSet}
+                exclusive
+                onChange={handleRecipeSet}
+                aria-label="recipe set"
+              >
+                <ToggleButton value="all" aria-label="all">
+                  All
+                </ToggleButton>
+                <ToggleButton
+                  value="mine"
+                  aria-label="mine"
+                  disabled={Object.keys(user.postedRecipes).length === 0}
+                >
+                  Mine
+                </ToggleButton>
+                <ToggleButton
+                  value="yumd"
+                  aria-label="yumd"
+                  disabled={Object.keys(user.yumdRecipes).length === 0}
+                >
+                  Yumd
+                </ToggleButton>
+                <ToggleButton
+                  value="ewwd"
+                  aria-label="eww"
+                  disabled={Object.keys(user.ewwdRecipes).length === 0}
+                >
+                  Ewwd
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
+            <Grid item xs={11}>
               <Container className="classes.cardGrid">
                 <Grid container spacing={3}>
                   {filteredRecipes.map((card) => (
