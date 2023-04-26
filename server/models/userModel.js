@@ -32,14 +32,14 @@ const userSchema = new mongoose.Schema({
     of: mongoose.Schema.Types.ObjectId,
     ref: 'Recipe',
   },
-  userYumdVotes: {
-    type: Number,
-    default: 0,
-  },
-  userEwwdVotes: {
-    type: Number,
-    default: 0,
-  },
+  // userYumdVotes: {
+  //   type: Number,
+  //   default: 0,
+  // },
+  // userEwwdVotes: {
+  //   type: Number,
+  //   default: 0,
+  // },
 });
 
 const User = mongoose.model('user', userSchema);

@@ -39,7 +39,11 @@ function APIAddForm() {
                 throw new Error(res.status);
               })
             // updates state in the cardSlice reducer by adding current data(recipe) as the payload
-            .then(data => dispatch(addCard(data)))
+            .then(data => {
+                console.log(`this is data from our fetch request: ${data}`)
+                dispatch(addCard(data))
+            }
+                )
             .then(() => handleClose())
             .catch(() => {
                 setQueryError(true);
