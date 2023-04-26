@@ -1,5 +1,6 @@
 const path = require('path');
 const request = require('supertest');
+const helpers = require('../helpers');
 
 const server = 'http://localhost:3000';
 
@@ -21,21 +22,56 @@ describe('Route integration', () => {
           .then(data => {
             expect(Array.isArray(data.body)).toEqual(true);
             if (data.body.length) {
-              const example = data.body[0]
-              expect(typeof example).toEqual('object');
-              expect(
-                Object.hasOwn(example, 'title') && 
-                Object.hasOwn(example, 'directions')
-                // insert other required properties here
-                ).toEqual(true);
+              for (let i = 0; i < data.body.length; i++) {
+                // console.log(data.body);
+                const example = data.body[i];
+                expect(typeof example).toEqual('object');
+                expect(
+                  Object.hasOwn(example, 'title') && 
+                  Object.hasOwn(example, 'directions') && 
+                  Object.hasOwn(example, 'url') &&
+                  Object.hasOwn(example, 'ingredientList') && 
+                  Object.hasOwn(example, 'yumdVote')  && 
+                  Object.hasOwn(example, 'ewwdVote')  && 
+                  Object.hasOwn(example, 'imagePath') 
+                  // && Object.hasOwn(example, 'tastyId')  // uncomment after DB entry is fixed               
+                  ).toBe(true);
+              }
             };
           });
       });
     });
 
-    xdescribe('POST to /add', () => {
+    describe('POST to /add', () => {
       // declare an "it" statement with description of what test is suppose to do
-    })
+      it('responds with status 200, json content-type, and a new recipe document to be created with the correct properties', () => {
+        return request(server)
+          .post('/recipe/add')
+          .send(helpers.mockPostRecipe)
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .expect(200)
+          .then(resp => {
+            const example = resp.body;
+            expect(typeof example).toEqual('object');
+            expect(
+              Object.hasOwn(example, 'title') && 
+              Object.hasOwn(example, 'directions') && 
+              Object.hasOwn(example, 'url') &&
+              Object.hasOwn(example, 'ingredientList') && 
+              Object.hasOwn(example, 'yumdVote')  && 
+              Object.hasOwn(example, 'ewwdVote')  && 
+              Object.hasOwn(example, 'imagePath') 
+              && Object.hasOwn(example, 'tastyId')  
+              ).toBe(true);
+          });
+      });
+
+    });
+
+    // describe('PUT to /update', () => {
+    //   console.log('id seen in PUT block: ', test_id);
+    // });
+
   })
 })
 
