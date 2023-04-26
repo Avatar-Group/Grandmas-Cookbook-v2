@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const mongoose = require('mongoose');
 // eslint-disable-next-line import/no-import-module-exports
-// const Recipe = require('./recipeModel') ;
+const Recipe = require('./recipeModel') ;
 // https://mongoosejs.com/docs/schematypes.html#maps
 
 const userSchema = new mongoose.Schema({

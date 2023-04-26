@@ -119,10 +119,9 @@ userController.updateUserYumdVotes = async (req, res, next) => {
 
   try {
     const user = await User.findById(userId);
-    const recipe = user.postedRecipes.get(recipeId)
 
     // add recipe to yumdRecipe field
-    user.yumdRecipes.set(recipeId, recipe);
+    user.yumdRecipes.set(recipeId, recipeId);
 
     // increment user yumd vote 
     user.userYumdVotes += 1;
@@ -146,10 +145,9 @@ userController.updateUserEwwdVotes = async (req, res, next) => {
 
   try {
     const user = await User.findById(userId);
-    const recipe = user.postedRecipes.get(recipeId)
 
     // add recipe to ewwdRecipe field
-    user.ewwdRecipes.set(recipeId, recipe);
+    user.ewwdRecipes.set(recipeId, recipeId);
 
     // increment user ewwd vote 
     user.userEwwdVotes += 1;
@@ -167,37 +165,27 @@ userController.updateUserEwwdVotes = async (req, res, next) => {
   };
 };
 
-userController.isLoggedIn = async (req, res, next) => {
+// update user's posted recipes
+userController.updateUserPostedRecipes = async (req, res, next) => {
+  const { userId, recipeId} = req.params;
   try {
-    if (req.user) return next();
-    // maybe redirect to /login or something?
-    return res.sendStatus(401);
-  } catch (err) {
-      return next({
-        log: 'error with user verification, check userController.isLoggedIn',
-        message: { err: 'User not verified'}
-      })
-  }
-}
+    const user = await User.findById(userId);
 
-userController.logout = async (req, res, next) => {
-  console.log('in userController.logout');
-  console.log('req.user before logout', req.user)
-  try {
-    req.logout((err) => {
-      if (err) throw Error(err);
-      // console.log('user is logged out!');
-      // return next()
-    })
-    console.log('req.user after logout', req.user)
+    // add recipe to user's profile
+    user.postedRecipes.set(recipeId, recipeId);
+
+    await user.save();
+
+    req.user = user;
     return next();
-  } catch (err) {
-    return next({
-      log: 'error with user logout, check userController.logout',
-      message: { err: 'User did not log out' }
-    })
   }
-}
+  catch (err) {
+    return next({
+      log: 'Error adding recipe to user\'s profile',
+      message: { err: 'Unable to add recipe'}
+    });
+  };
+};
 
 
 module.exports = userController;

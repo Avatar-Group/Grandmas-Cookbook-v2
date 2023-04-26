@@ -8,7 +8,6 @@ const recipeController = {};
 recipeController.getAllRecipes = async (req, res, next) => {
   try {
     const getRecipes = await Recipe.find({});
-
     res.locals.allRecipes = getRecipes;
     return next();
   } catch (err) {
