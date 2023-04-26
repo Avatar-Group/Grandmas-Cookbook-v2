@@ -18,7 +18,7 @@ googleAuth(passport);
 const isDev = process.env.NODE_ENV === 'development'
 const baseurl = isDev ? 'http://localhost:8080/' : '/';
 const successRedirect = `${baseurl}`;
-const failureRedirect = `${baseurl}auth/failure`;
+const failureRedirect = `${baseurl}login`;
 
 app.use(cors());
 app.use(express.json());
@@ -52,6 +52,11 @@ app.get('/google/callback', passport.authenticate('google', {
   successRedirect,
   failureRedirect
 }))
+
+// app.get('/google/callback', passport.authenticate('google'), (req, res) => {
+//   console.log(req.user);
+//   res.status(200).json(req.user.id);
+// })
 
 // statically serve everything in the dist folder on the route '/dist'
 app.use('/dist', express.static(path.join(__dirname, '../dist/')));
