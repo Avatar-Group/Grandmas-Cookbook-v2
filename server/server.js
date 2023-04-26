@@ -1,6 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const express = require('express');
+const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
+const passport = require('passport');
+const googleAuth = require('./auth/google')
 const connectDB = require('./config/db');
 require('dotenv').config();
 
@@ -9,8 +13,45 @@ connectDB();
 const app = express();
 const port = 3000;
 
+googleAuth(passport);
+
+const isDev = process.env.NODE_ENV === 'development'
+const baseurl = isDev ? 'http://localhost:8080/' : '/';
+const successRedirect = `${baseurl}`;
+const failureRedirect = `${baseurl}auth/failure`;
+
 app.use(cors());
 app.use(express.json());
+
+app.use(session({ 
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  maxAge: 100000000
+}))
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+// put this isLoggedIn middleware in all protected routes
+const isLoggedIn = (req, res, next) =>  req.user ? next() : res.sendStatus(401);
+
+// testing route for google oauth
+app.get('/auth', (req, res) => {
+  res.send('<a href="/auth/google">Authenticate with Google</a>')
+});
+
+// when a get request is made to /auth/google, passport.authenticate redirects to google oauth
+app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
+// once that process is complete, google redirects to the callbackURL (/google/callback here)
+// during this process, passport handles the token req/res, user req/res, etc.
+// https://www.passportjs.org/concepts/oauth2/authentication/
+// when all that is done, it calls the verify function in the GoogleStrategy passed to passport.use (auth.js)
+
+app.get('/google/callback', passport.authenticate('google', {
+  successRedirect,
+  failureRedirect
+}))
 
 // statically serve everything in the dist folder on the route '/dist'
 app.use('/dist', express.static(path.join(__dirname, '../dist/')));
@@ -50,3 +91,6 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
+
+
+module.exports = baseurl;
