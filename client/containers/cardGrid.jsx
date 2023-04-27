@@ -59,20 +59,23 @@ function CardGrid() {
 
   useEffect(() => {
     let tempRecipes = recipes;
-    tempRecipes = tempRecipes.filter((recipe) => {
-      switch (recipeSet) {
-        case 'all':
-          return true;
-        case 'mine':
-          return Object.hasOwn(user.postedRecipes, recipe._id);
-        case 'yumd':
-          return Object.hasOwn(user.yumdRecipes, recipe._id);
-        case 'ewwd':
-          return Object.hasOwn(user.ewwdRecipes, recipe._id);
-        default:
-          return true;
-      }
-    });
+    if (user.postedRecipes || user.yumdRecipes || user.ewwdRecipes) {
+      tempRecipes = tempRecipes.filter((recipe) => {
+        switch (recipeSet) {
+          case 'all':
+            return true;
+          case 'mine':
+            return Object.hasOwn(user.postedRecipes, recipe._id);
+          case 'yumd':
+            return Object.hasOwn(user.yumdRecipes, recipe._id);
+          case 'ewwd':
+            return Object.hasOwn(user.ewwdRecipes, recipe._id);
+          default:
+            return true;
+        }
+      });
+    }
+
     tempRecipes = tempRecipes.filter((recipe) =>
       recipe.title.toLowerCase().includes(filterKeyword.toLowerCase())
     );
@@ -118,21 +121,30 @@ function CardGrid() {
                 <ToggleButton
                   value="mine"
                   aria-label="mine"
-                  disabled={Object.keys(user.postedRecipes).length === 0}
+                  disabled={
+                    user.postedRecipes &&
+                    Object.keys(user.postedRecipes).length === 0
+                  }
                 >
                   Mine
                 </ToggleButton>
                 <ToggleButton
                   value="yumd"
                   aria-label="yumd"
-                  disabled={Object.keys(user.yumdRecipes).length === 0}
+                  disabled={
+                    user.yumdRecipes &&
+                    Object.keys(user.yumdRecipes).length === 0
+                  }
                 >
                   Yumd
                 </ToggleButton>
                 <ToggleButton
                   value="ewwd"
                   aria-label="eww"
-                  disabled={Object.keys(user.ewwdRecipes).length === 0}
+                  disabled={
+                    user.ewwdRecipes &&
+                    Object.keys(user.ewwdRecipes).length === 0
+                  }
                 >
                   Ewwd
                 </ToggleButton>

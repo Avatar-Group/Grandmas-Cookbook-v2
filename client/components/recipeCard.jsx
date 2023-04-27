@@ -48,9 +48,11 @@ function RecipeCard({ recipe, children, type, addHandler }) {
   const [vote, setVote] = React.useState(null);
 
   React.useEffect(() => {
-    if (Object.hasOwn(user.yumdRecipes, recipe._id)) setVote('yum');
-    else if (Object.hasOwn(user.ewwdRecipes, recipe._id)) setVote('eww');
-  }, []);
+    if (user.yumdRecipes || user.ewwdRecipes) {
+      if (Object.hasOwn(user.yumdRecipes, recipe._id)) setVote('yum');
+      else if (Object.hasOwn(user.ewwdRecipes, recipe._id)) setVote('eww');
+    }
+  });
 
   const voteRecipe = async (voteType) => {
     try {
@@ -98,10 +100,12 @@ function RecipeCard({ recipe, children, type, addHandler }) {
   };
 
   const handleVote = (event, voteType) => {
-    if (vote) deleteVote(vote);
-    if (voteType) voteRecipe(voteType);
-    console.log(vote, voteType);
-    setVote(voteType);
+    if (user.loggedIn) {
+      if (vote) deleteVote(vote);
+      if (voteType) voteRecipe(voteType);
+      console.log(vote, voteType);
+      setVote(voteType);
+    }
   };
 
   return (
@@ -126,36 +130,41 @@ function RecipeCard({ recipe, children, type, addHandler }) {
       </CardContent>
       <CardActions>
         <Stack direction="row" spacing={1}>
-          <Tooltip title="Rate Recipe">
-            <ToggleButtonGroup
-              value={vote}
-              exclusive
-              onChange={handleVote}
-              aria-label="recipe vote"
-            >
-              <ToggleButton value="yum" aria-label="yum" size="small">
-                <InsertEmoticonIcon sx={{ marginRight: '.5rem' }} />
-                <Typography>{recipe.yumdVote}</Typography>
-              </ToggleButton>
-              <ToggleButton value="eww" aria-label="eww" size="small">
-                <SentimentVeryDissatisfiedIcon sx={{ marginRight: '.5rem' }} />
-                <Typography>{recipe.ewwdVote}</Typography>
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Tooltip>
-          <MoreButton recipe={recipe} />
-          {Object.hasOwn(user.postedRecipes, recipe._id) && (
-            <Tooltip title="Delete Recipe">
-              <Button
-                variant="contained"
-                size="small"
-                onClick={setDeleteButtonLogic}
-                sx={{ minWidth: '25px' }}
+          {user.loggedIn && (
+            <Tooltip title="Rate Recipe">
+              <ToggleButtonGroup
+                value={vote}
+                exclusive
+                onChange={handleVote}
+                aria-label="recipe vote"
               >
-                <DeleteForeverIcon sx={{ color: 'red' }} />
-              </Button>
+                <ToggleButton value="yum" aria-label="yum" size="small">
+                  <InsertEmoticonIcon sx={{ marginRight: '.5rem' }} />
+                  <Typography>{recipe.yumdVote}</Typography>
+                </ToggleButton>
+                <ToggleButton value="eww" aria-label="eww" size="small">
+                  <SentimentVeryDissatisfiedIcon
+                    sx={{ marginRight: '.5rem' }}
+                  />
+                  <Typography>{recipe.ewwdVote}</Typography>
+                </ToggleButton>
+              </ToggleButtonGroup>
             </Tooltip>
           )}
+          <MoreButton recipe={recipe} />
+          {user.postedRecipes &&
+            Object.hasOwn(user.postedRecipes, recipe._id) && (
+              <Tooltip title="Delete Recipe">
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={setDeleteButtonLogic}
+                  sx={{ minWidth: '25px' }}
+                >
+                  <DeleteForeverIcon sx={{ color: 'red' }} />
+                </Button>
+              </Tooltip>
+            )}
         </Stack>
       </CardActions>
       {children}

@@ -1,17 +1,8 @@
 const { createSlice } = require('@reduxjs/toolkit');
 
-const fakeUser = {
-  _id: '644886ee599ee2c3e0729155',
-  googleId: '109839504910373242832',
-  email: 'sam.r.blackburn@gmail.com',
-  postedRecipes: {},
-  yumdRecipes: {},
-  ewwdRecipes: {},
-  __v: 0,
-};
 const userSlice = createSlice({
   name: 'user',
-  initialState: fakeUser,
+  initialState: {},
   reducers: {
     // init user (mongo _id)
     initUser: (state, param) => {

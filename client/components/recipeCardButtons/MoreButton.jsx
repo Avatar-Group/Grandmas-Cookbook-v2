@@ -15,6 +15,7 @@ export default function MoreButton({ recipe }) {
   const [scroll, setScroll] = React.useState('paper');
 
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state);
 
   const [saveEditButton, setSaveEditButton] = React.useState('Edit');
   const [canEdit, setCanEdit] = React.useState(false);
@@ -127,9 +128,12 @@ export default function MoreButton({ recipe }) {
         </DialogContent>
 
         <DialogActions>
-          <Button color="success" onClick={canEditLogic}>
-            {saveEditButton}
-          </Button>
+          {user.postedRecipes &&
+            Object.hasOwn(user.postedRecipes, recipe._id) && (
+              <Button color="success" onClick={canEditLogic}>
+                {saveEditButton}
+              </Button>
+            )}
           <Button color="warning" onClick={handleClose}>
             Close
           </Button>
