@@ -44,12 +44,18 @@ function CardGrid() {
    
 
   useEffect(() => {
-    fetch('/recipe/all', { method: 'GET' })
+    fetch('/recipe/all', { 
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
       .then((res) => {
         if (res.ok) return res.json();
         throw new Error(res.status);
       })
       .then((data) => {
+        console.log(`inside of fetch request for get all recipes FRONT END`)
         dispatch(init(data));
       })
       .catch((err) => console.log(`Error code: ${err}`));
