@@ -200,10 +200,14 @@ userController.logout = async (req, res, next) => {
 }
 
 userController.getUserByGoogleId = async (req, res, next) => {
+  console.log('in getUserByGoogleId')
+  console.log('req.user in getUserByGoogleId', req.user);
   try {
+    if (!req.user) res.redirect('/');
     const googleId = req.user.id;
     // query db for use whose googleId matches googleId
-    const user = await User.find({ googleId });
+    const user = await User.findOne({ googleId });
+    if (!user) throw new Error();
     console.log('found the user based on google id', user);
     res.locals.user = user;
     return next();

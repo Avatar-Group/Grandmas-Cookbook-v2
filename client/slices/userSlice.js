@@ -4,19 +4,22 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
       loggedIn: false,
+      _id: null,
   },
   reducers: {
     // init user (mongo _id)
     initUser: (state, param) => {
+      console.log(param);
       const { payload } = param;
       const tempState = state;
-      tempState._id = { ...state.user._id, ...payload }
+      tempState._id = { ...state._id, ...payload }
     },
     // user logged in
     userLoggedIn: (state, param) => {
+      console.log('userLoggedIn', param)
       const { payload } = param;
       const tempState = state;
-      tempState.loggedIn = true;
+      tempState.loggedIn = payload;
     },
     // created recipes
     createUserRecipe: (state, param) => {
