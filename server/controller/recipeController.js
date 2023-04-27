@@ -116,7 +116,7 @@ recipeController.updateRecipe = async (req, res, next) => {
     return next();
   } catch (err) {
     return next({
-      log: 'error in recipeController.updateRecipe',
+      log: err,
       message: { err: 'failed to update this recipe in database' },
     });
   }
@@ -147,7 +147,7 @@ recipeController.deleteRecipe = async (req, res, next) => {
     });
   } catch (err) {
     return next({
-      log: 'error in recipeController.deleteRecipe',
+      log: err,
       message: { err: 'Unable to delete recipe from database' },
     });
   }
@@ -155,7 +155,7 @@ recipeController.deleteRecipe = async (req, res, next) => {
 
 // upvote a recipe in database
 recipeController.upVoteRecipe = async (req, res, next) => {
-  const { recipeId, userId } = req.params;
+  const { recipeId } = req.params;
 
   try {
     // query for recipe by recipe ID and increment yumdVote
@@ -169,7 +169,7 @@ recipeController.upVoteRecipe = async (req, res, next) => {
     return next();
   } catch (err) {
     return next({
-      log: 'error in recipeController.upVoteRecipe',
+      log: err,
       message: { err: 'Could not yum this recipe ' },
     });
   }
@@ -190,8 +190,51 @@ recipeController.downVoteRecipe = async (req, res, next) => {
     return next();
   } catch (err) {
     return next({
-      log: 'error in recipeController.downVoteRecipe',
+      log: err,
       message: { err: 'Could not eww this recipe ' },
+    });
+  }
+};
+
+// remove a recipe upvote in database
+recipeController.deleteUpVoteRecipe = async (req, res, next) => {
+  const { recipeId } = req.params;
+
+  try {
+    // query for recipe by recipe ID and increment yumdVote
+    const upVoteRecipe = await Recipe.findByIdAndUpdate(
+      recipeId,
+      { $inc: { yumdVote: -1 } },
+      { new: true }
+    );
+
+    res.locals.upVoteRecipe = upVoteRecipe;
+    return next();
+  } catch (err) {
+    return next({
+      log: err,
+      message: { err: 'Could not remove yum from this recipe ' },
+    });
+  }
+};
+
+// remove a recipe downvote in database
+recipeController.deleteDownVoteRecipe = async (req, res, next) => {
+  const { recipeId } = req.params;
+
+  try {
+    // query for recipe by iD and increment yumdVote
+    const downVoteRecipe = await Recipe.findByIdAndUpdate(
+      recipeId,
+      { $inc: { ewwdVote: -1 } },
+      { new: true }
+    );
+    res.locals.downVoteRecipe = downVoteRecipe;
+    return next();
+  } catch (err) {
+    return next({
+      log: err,
+      message: { err: 'Could not remove eww from this recipe ' },
     });
   }
 };

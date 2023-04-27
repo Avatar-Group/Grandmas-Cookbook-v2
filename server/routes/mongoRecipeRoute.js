@@ -60,4 +60,24 @@ router.patch(
   }
 );
 
+// decrement yumdVote count for recipe
+router.patch(
+  '/yumRecipeRemove/:recipeId',
+  recipeController.deleteUpVoteRecipe,
+  (req, res) => {
+    console.log('end of remove up vote recipe route');
+    res.status(200).json(res.locals.upVoteRecipe);
+  }
+);
+
+// decrement ewwdVote count for recipe
+router.patch(
+  '/ewwRecipeRemove/:recipeId',
+  recipeController.deleteDownVoteRecipe,
+  (req, res) => {
+    console.log('end of remove down vote recipe route');
+    res.status(200).json(res.locals.downVoteRecipe);
+  }
+);
+
 module.exports = router;
