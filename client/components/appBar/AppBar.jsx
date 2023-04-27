@@ -16,6 +16,7 @@ const NavBar = () => {
   // to trigger oauth, and then dispatch initUser and userLoggedIn(true)
 
   // when logout is clicked, it should make a delete request to /users/logout
+  // and dispatch initUser(null) and userLoggedIn(false)
 
   useEffect(() => {
     // fetch the specific user
@@ -27,42 +28,15 @@ const NavBar = () => {
         throw new Error(res.status);
       })
       .then((data) => {
-        console.log('here is the user data on the frontend', data._id);
         dispatch(initUser(data._id));
         dispatch(userLoggedIn(true));
       })
       .catch((err) => console.log(`Error code: ${err}`));
   }, []);
 
-  // useEffect(() => {
-  //   // only run this if user is logged in
-  //   if (loggedIn) {
-  //     fetch('/users/logoutUser', { method: 'DELETE' })
-  //     .then((res) => {
-  //       if (res.ok) {
-  //         return res.json();
-  //       }
-  //       throw new Error(res.status);
-  //     })
-  //     .then((data) => {
-  //       console.log('here is the data', data);
-  //       if (data.message) {
-  //         // then dispatch(initUser(null)) 
-  //         // and dispatch(userLoggedIn(false))
-  //         // console.log(data);
-  //         dispatch(initUser(null));
-  //         dispatch(userLoggedIn(false));
 
-  //       }
-  //     })
-  //     .catch((err) => console.log(`Error code: ${err}`))
-  //   }
-  // }, [loggedIn]); // end of useEffect
 
   const handleLogout = () => {
-    // make a delete request to /users/logout
-    const url = '/users/logoutUser'
-    console.log(typeof url)
     fetch('/users/logoutUser', { method: 'DELETE' })
       .then((res) => {
         if (res.ok) {
@@ -71,14 +45,9 @@ const NavBar = () => {
         throw new Error(res.status);
       })
       .then((data) => {
-        console.log('here is the data', data);
         if (data.message) {
-          // then dispatch(initUser(null)) 
-          // and dispatch(userLoggedIn(false))
-          // console.log(data);
           dispatch(initUser(null));
           dispatch(userLoggedIn(false));
-
         }
       })
       .catch((err) => console.log(`Error code: ${err}`))
@@ -102,8 +71,6 @@ const NavBar = () => {
     <a href='/auth/google'>Login with google</a>
   </Button>
   )
-  
-  console.log('here is loggedIn in the component', loggedIn);
 
     return (<div>
       <AppBar>

@@ -9,14 +9,12 @@ const userSlice = createSlice({
   reducers: {
     // init user (mongo _id)
     initUser: (state, param) => {
-      console.log(param);
       const { payload } = param;
       const tempState = state;
       tempState._id = { ...state._id, ...payload }
     },
     // user logged in
     userLoggedIn: (state, param) => {
-      console.log('userLoggedIn', param)
       const { payload } = param;
       const tempState = state;
       tempState.loggedIn = payload;

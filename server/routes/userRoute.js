@@ -43,7 +43,7 @@ router.put('/userRecipe/:id', userController.updateUserEwwdVotes, (req, res) => 
 
 router.delete('/logoutUser', userController.logout, (req, res) => {
   console.log('end of user/logout route')
-  res.status(200).json({message: 'logged out'})
+  res.status(200).json({ message: 'logged out' })
 })
 
 router.get('/getUserByGoogleId', userController.getUserByGoogleId, (req, res) => {
