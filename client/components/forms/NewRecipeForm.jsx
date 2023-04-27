@@ -36,9 +36,9 @@ function NewRecipeForm() {
       })
       .catch(() => {
         console.error('Error in post request for user recipe');
-    });
+      });
 
-    fetch('/users/userRecipe/:id', {
+    fetch('/user/userRecipe/:id', {
       method: 'POST',
       body: JSON.stringify(newRecipe),
       headers: {
@@ -62,10 +62,10 @@ function NewRecipeForm() {
       component="form"
       sx={{
         '& > :not(style)': { m: 1, width: '70ch' },
-        display: 'flex', 
+        display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
       noValidate
       autoComplete="off"
@@ -74,47 +74,49 @@ function NewRecipeForm() {
         display: 'flex', 
         flexDirection: 'column',
         justifyContent: 'center' }}> */}
-        <TextField
-          sx={{
-            width: {sm: 300, md: 600},
-            md: 2,
-            boxShadow: 7
-          }}
-          id="recipe-title"
-          label="Recipe Title"
-          variant="outlined"
-        />
-        <TextField
-          sx={{
-            width: {sm: 300, md: 600},
-            md: 2,
-            boxShadow: 7
-          }}
-          id="recipe-ingredients"
-          label="Recipe Ingredients"
-          multiline
-          rows={4}
-          variant="outlined"
-        />
-        <TextField
-          sx={{
-            width: {sm: 300, md: 600},
-            md: 2,
-            boxShadow: 7
-          }}
-          id="recipe-directions"
-          label="Recipe Directions"
-          multiline
-          rows={4}
-          variant="outlined"
-        />
-        <Button 
-          sx={{
-            boxShadow: 7,
-            borderRadius: 5
-          }}
-          onClick={handleSubmit}
-          >Submit</Button>
+      <TextField
+        sx={{
+          width: { sm: 300, md: 600 },
+          md: 2,
+          boxShadow: 7,
+        }}
+        id="recipe-title"
+        label="Recipe Title"
+        variant="outlined"
+      />
+      <TextField
+        sx={{
+          width: { sm: 300, md: 600 },
+          md: 2,
+          boxShadow: 7,
+        }}
+        id="recipe-ingredients"
+        label="Recipe Ingredients"
+        multiline
+        rows={4}
+        variant="outlined"
+      />
+      <TextField
+        sx={{
+          width: { sm: 300, md: 600 },
+          md: 2,
+          boxShadow: 7,
+        }}
+        id="recipe-directions"
+        label="Recipe Directions"
+        multiline
+        rows={4}
+        variant="outlined"
+      />
+      <Button
+        sx={{
+          boxShadow: 7,
+          borderRadius: 5,
+        }}
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
       {/* </div> */}
     </Box>
   );

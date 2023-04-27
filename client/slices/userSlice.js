@@ -1,23 +1,26 @@
 const { createSlice } = require('@reduxjs/toolkit');
 
+const initialState = {
+  loggedIn: false,
+  _id: null,
+};
 const userSlice = createSlice({
   name: 'user',
-  initialState: {
-      loggedIn: false,
-  },
+  initialState,
   reducers: {
     // init user (mongo _id)
     initUser: (state, param) => {
       const { payload } = param;
       const tempState = state;
-      tempState._id = { ...state.user._id, ...payload }
+      return { ...tempState, ...payload };
     },
     // user logged in
     userLoggedIn: (state, param) => {
       const { payload } = param;
       const tempState = state;
-      tempState.loggedIn = true;
+      tempState.loggedIn = payload;
     },
+    logoutUser: () => initialState,
     // created recipes
     createUserRecipe: (state, param) => {
       const { payload } = param;
@@ -25,7 +28,7 @@ const userSlice = createSlice({
       newRecipe[payload._id] = payload._id;
       const tempState = state;
       tempState.postedRecipes = {
-        ...state.user.postedRecipes,
+        ...state.postedRecipes,
         ...newRecipe,
       };
     },
@@ -35,7 +38,7 @@ const userSlice = createSlice({
       const newRecipe = {};
       newRecipe[payload._id] = payload._id;
       const tempState = state;
-      tempState.yumdRecipes = { ...state.user.yumdRecipes, ...newRecipe };
+      tempState.yumdRecipes = { ...state.yumdRecipes, ...newRecipe };
     },
     // eww'd recipes
     addEwwdRecipe: (state, param) => {
@@ -43,7 +46,7 @@ const userSlice = createSlice({
       const newRecipe = {};
       newRecipe[payload._id] = payload._id;
       const tempState = state;
-      tempState.ewwdRecipes = { ...state.user.ewwdRecipes, ...newRecipe };
+      tempState.ewwdRecipes = { ...state.ewwdRecipes, ...newRecipe };
     },
     // unyymm'd recipes
     deleteYumdRecipe: (state, param) => {
@@ -61,10 +64,20 @@ const userSlice = createSlice({
       const { payload } = param;
       const tempState = state;
       delete tempState.recipes[payload._id];
-    }
-  }
+    },
+  },
 });
 
 const { actions, reducer } = userSlice;
-export const { initUser, userLoggedIn, createUserRecipe,  addYumdRecipe, addEwwdRecipe, deleteYumdRecipe, deleteEwwdRecipe, deleteUserRecipe } = actions;
+export const {
+  initUser,
+  userLoggedIn,
+  logoutUser,
+  createUserRecipe,
+  addYumdRecipe,
+  addEwwdRecipe,
+  deleteYumdRecipe,
+  deleteEwwdRecipe,
+  deleteUserRecipe,
+} = actions;
 export default reducer;
