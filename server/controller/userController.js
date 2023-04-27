@@ -3,6 +3,33 @@ const User = require('../models/userModel');
 
 const userController = {};
 
+userController.getUserOneRecipe = async (req, res, next) => {
+  // destructuring user id & recipe title
+  const { userId, recipeTitle } = req.params;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      console.log("User doesn't exist");
+    }
+    const userRecipes = user.postedRecipes;
+    const recipe = userRecipes.get(recipeTitle);
+
+    if (!recipe) {
+      console.log('Recipe does not exist.');
+    }
+    res.locals.recipe = recipe;
+    return next();
+  } catch (err) {
+    return next({
+      log: 'error occured in userController.getUserOneRecipe',
+      status: 500,
+      message: { err: "failed to get user's recipe from database" },
+    });
+  }
+};
+
 // update user's yumdRecipes
 userController.updateUserYumdVotes = async (req, res, next) => {
   const { recipeId } = req.params;
@@ -180,34 +207,6 @@ module.exports = userController;
 //       log: 'error occured in userController.getAllUsersRecipes',
 //       status: 500,
 //       message: { err: 'failed to get all users recipes from database' },
-//     });
-//   }
-// };
-
-// userController.getUserOneRecipe = async (req, res, next) => {
-//   // destructuring user id & recipe title
-//   const { userId, recipeTitle } = req.params;
-
-//   try {
-//     const user = await User.findById(userId);
-
-//     if (!user) {
-//       console.log("User doesn't exist");
-//     }
-//     const userRecipes = user.postedRecipes;
-//     const recipe = userRecipes.get(recipeTitle);
-
-//     if (!recipe) {
-//       console.log('Recipe does not exist.');
-//     }
-
-//     res.locals.recipe = recipe;
-//     return next();
-//   } catch (err) {
-//     return next({
-//       log: 'error occured in userController.getUserOneRecipe',
-//       status: 500,
-//       message: { err: "failed to get user's recipe from database" },
 //     });
 //   }
 // };

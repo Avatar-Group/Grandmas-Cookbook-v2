@@ -4,6 +4,12 @@ const baseurl = require('../server');
 
 console.log(baseurl);
 
+// get user's one recipe
+router.get('/userRecipe/:id', userController.getUserOneRecipe, (req, res) => {
+  console.log("end of get user's one recipe");
+  res.status(200).json(res.locals.recipe);
+});
+
 // update user's yumdRecipe recipe
 router.put(
   '/yumRecipe/:recipeId',
@@ -74,12 +80,6 @@ module.exports = router;
 // router.get('/postedRecipes/:id', userController.getAllUsersRecipes, (req, res) => {
 //   console.log('end of get user\'s recipe');
 //   res.status(200).json(res.locals.postedRecipes);
-// });
-
-// // get user's one recipe
-// router.get('/userRecipe/:id', userController.getUserOneRecipe, (req, res) => {
-//   console.log('end of get user\'s one recipe');
-//   res.status(200).json(res.locals.recipe);
 // });
 
 // // get all user's yum'd recipes
