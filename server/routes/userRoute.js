@@ -2,6 +2,8 @@ const router = require('express').Router();
 const userController = require('../controller/userController');
 const baseurl = require('../server');
 
+console.log(baseurl);
+
 
 // get all of user's recipe
 router.get('/postedRecipes/:id', userController.getAllUsersRecipes, (req, res) => {
@@ -39,9 +41,14 @@ router.put('/userRecipe/:id', userController.updateUserEwwdVotes, (req, res) => 
   res.status(200).json(req.user);
 });
 
-router.get('/logout', userController.logout, (req, res) => {
+router.delete('/logoutUser', userController.logout, (req, res) => {
   console.log('end of user/logout route')
-  res.status(200).redirect(baseurl)
+  res.status(200).json({ message: 'logged out' })
+})
+
+router.get('/getUserByGoogleId', userController.getUserByGoogleId, (req, res) => {
+  console.log('end of /getUserByGoogleId route');
+  res.status(200).json(res.locals.user)
 })
 
 

@@ -5,12 +5,16 @@ import { Provider } from "react-redux";
 import App from './App.jsx';
 import cardReducer from "./slices/cardSlice";
 import modalReducer from "./slices/modalSlice"
+import userReducer from './slices/userSlice';
 
 import styles from './scss/application.scss'
 
 const store = configureStore({
-    reducer: { card: cardReducer, 
-                modal: modalReducer }
+    reducer: { 
+        card: cardReducer, 
+        modal: modalReducer,
+        user: userReducer 
+    }
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

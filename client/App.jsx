@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Typography, AppBar, Container, Toolbar, MuiPaper } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CardGrid from './containers/cardGrid.jsx';
+import NavBar from './components/appBar/AppBar.jsx'
 
 const theme = createTheme({
   palette: {
@@ -30,8 +31,9 @@ function App() {
     <div>
       <ThemeProvider theme={theme}>
         <header>
+          <NavBar />
           <Typography align="center" variant="h1" color="primary">
-            {"Grandma's Cookbook"}
+            Grandma's Cookbook
           </Typography>
           <div className="actionHeader">
             <Typography variant="h2" align="center" color="primary">

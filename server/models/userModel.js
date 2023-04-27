@@ -17,7 +17,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
   },
-
   postedRecipes: {
     type: Map,
     of: mongoose.Schema.Types.ObjectId,
