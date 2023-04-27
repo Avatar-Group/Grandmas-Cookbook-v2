@@ -7,7 +7,7 @@ const User = require('../models/userModel');
 
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {
-    console.log('serializeUser', user);
+    // console.log('serializeUser', user);
     done(null, user);
   });
 
@@ -42,10 +42,10 @@ module.exports = (passport) => {
               yumdRecipes: new Map(),
               ewwdRecipes: new Map(),
             });
-          done(null, profile);
+          return done(null, profile);
         } catch (err) {
           console.error(err);
-          done(err);
+          return done(err);
         }
       }
     )

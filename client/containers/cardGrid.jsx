@@ -87,16 +87,17 @@ function CardGrid() {
       <div>
         <Container maxWidth="lg">
           <Grid container spacing={2}>
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
-              <Button
-                variant="contained"
-                onClick={handleOpenAddRecipe}
-                sx={{ marginTop: '16px' }}
-              >
-                Get New Recipe
-              </Button>
-            </Grid>
-
+            {user.loggedIn && (
+              <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                <Button
+                  variant="contained"
+                  onClick={handleOpenAddRecipe}
+                  sx={{ marginTop: '16px' }}
+                >
+                  Add New Recipe
+                </Button>
+              </Grid>
+            )}
             <Grid item xs={12} sx={{ textAlign: 'center' }}>
               <TextField
                 label="Find Your Recipe"
@@ -122,8 +123,9 @@ function CardGrid() {
                   value="mine"
                   aria-label="mine"
                   disabled={
-                    user.postedRecipes &&
-                    Object.keys(user.postedRecipes).length === 0
+                    !Object.hasOwn(user, 'postedRecipes') ||
+                    (Object.hasOwn(user, 'postedRecipes') &&
+                      Object.keys(user.postedRecipes).length === 0)
                   }
                 >
                   Mine
@@ -132,8 +134,9 @@ function CardGrid() {
                   value="yumd"
                   aria-label="yumd"
                   disabled={
-                    user.yumdRecipes &&
-                    Object.keys(user.yumdRecipes).length === 0
+                    !Object.hasOwn(user, 'yumdRecipes') ||
+                    (Object.hasOwn(user, 'yumdRecipes') &&
+                      Object.keys(user.yumdRecipes).length === 0)
                   }
                 >
                   Yumd
@@ -142,8 +145,9 @@ function CardGrid() {
                   value="ewwd"
                   aria-label="eww"
                   disabled={
-                    user.ewwdRecipes &&
-                    Object.keys(user.ewwdRecipes).length === 0
+                    !Object.hasOwn(user, 'ewwdRecipes') ||
+                    (Object.hasOwn(user, 'ewwdRecipes') &&
+                      Object.keys(user.ewwdRecipes).length === 0)
                   }
                 >
                   Ewwd

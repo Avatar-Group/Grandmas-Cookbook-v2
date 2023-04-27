@@ -78,6 +78,7 @@ module.exports = {
     proxy: {
       '/recipe': 'http://localhost:3000',
       '/tasty': 'http://localhost:3000',
+      '/auth/google': 'http://localhost:3000',
       '/user': 'http://localhost:3000',
     },
   },

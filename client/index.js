@@ -10,7 +10,11 @@ import userReducer from './slices/userSlice';
 import styles from './scss/application.scss';
 
 const store = configureStore({
-  reducer: { card: cardReducer, modal: modalReducer, user: userReducer },
+  reducer: {
+    card: cardReducer,
+    modal: modalReducer,
+    user: userReducer,
+  },
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -6,7 +6,6 @@ const userController = {};
 // update user's yumdRecipes
 userController.updateUserYumdVotes = async (req, res, next) => {
   const { recipeId } = req.params;
-  console.log(recipeId);
   try {
     const user = await User.findOne({ googleId: req.user.id });
     // add recipe to yumdRecipe field
@@ -125,20 +124,34 @@ userController.isLoggedIn = async (req, res, next) => {
 };
 
 userController.logout = async (req, res, next) => {
-  console.log('in userController.logout');
-  console.log('req.user before logout', req.user);
   try {
     req.logout((err) => {
       if (err) throw Error(err);
       // console.log('user is logged out!');
       // return next()
     });
-    console.log('req.user after logout', req.user);
     return next();
   } catch (err) {
     return next({
       log: 'error with user logout, check userController.logout',
       message: { err: 'User did not log out' },
+    });
+  }
+};
+
+userController.getUserByGoogleId = async (req, res, next) => {
+  try {
+    if (!req.user) res.redirect('/');
+    const googleId = req.user.id;
+    // query db for use whose googleId matches googleId
+    const user = await User.findOne({ googleId });
+    if (!user) throw new Error();
+    res.locals.user = user;
+    return next();
+  } catch (err) {
+    return next({
+      log: 'error with finding user by google id, check userController.getUserByGoogleId',
+      message: { err: 'Could not find user by google id' },
     });
   }
 };

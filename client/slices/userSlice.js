@@ -1,21 +1,26 @@
 const { createSlice } = require('@reduxjs/toolkit');
 
+const initialState = {
+  loggedIn: false,
+  _id: null,
+};
 const userSlice = createSlice({
   name: 'user',
-  initialState: {},
+  initialState,
   reducers: {
     // init user (mongo _id)
     initUser: (state, param) => {
       const { payload } = param;
       const tempState = state;
-      tempState._id = { ...state.user._id, ...payload };
+      return { ...tempState, ...payload };
     },
     // user logged in
     userLoggedIn: (state, param) => {
       const { payload } = param;
       const tempState = state;
-      tempState.loggedIn = true;
+      tempState.loggedIn = payload;
     },
+    logoutUser: () => initialState,
     // created recipes
     createUserRecipe: (state, param) => {
       const { payload } = param;
@@ -66,6 +71,8 @@ const userSlice = createSlice({
 const { actions, reducer } = userSlice;
 export const {
   initUser,
+  userLoggedIn,
+  logoutUser,
   createUserRecipe,
   addYumdRecipe,
   addEwwdRecipe,
