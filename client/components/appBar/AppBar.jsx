@@ -19,9 +19,6 @@ const NavBar = () => {
   // and dispatch initUser(null) and userLoggedIn(false)
 
   useEffect(() => {
-    // fetch the specific user
-    // build a getUserByGoogleId middleware which uses req.user.id to search
-    // for the user by googleId in the database
     fetch('/users/getUserByGoogleId', { method: 'GET' })
       .then((res) => {
         if (res.ok) return res.json();
@@ -33,8 +30,6 @@ const NavBar = () => {
       })
       .catch((err) => console.log(`Error code: ${err}`));
   }, []);
-
-
 
   const handleLogout = () => {
     fetch('/users/logoutUser', { method: 'DELETE' })
@@ -55,7 +50,7 @@ const NavBar = () => {
 
   const logoutButton = (
     <Button 
-    color="ternary" 
+    color="secondary" 
     variant="contained"
     onClick={handleLogout}
   >
@@ -65,21 +60,26 @@ const NavBar = () => {
 
   const loginButton = (
     <Button 
-    color="ternary" 
+    color="secondary" 
     variant="contained"
   >
-    <a href='/auth/google'>Login with google</a>
+    <a href='/auth/google' style={{textDecoration: 'none', color: 'secondary'}}>Login with google</a>
   </Button>
   )
 
     return (<div>
       <AppBar>
-        <Toolbar>
+        <Toolbar style={{display: "flex", flexDirection: "row", justifyContent: "space-between",}}>
+          <span />
+          <Typography align="center" variant="h4" color="secondary">
+            Grandma's Cookbook
+          </Typography>
           { loggedIn ? 
             logoutButton : 
             loginButton
           }
         </Toolbar>
+
       </AppBar>
     </div>)
 }
