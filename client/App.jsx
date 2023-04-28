@@ -12,6 +12,7 @@ import NavBar from './components/appBar/AppBar.jsx';
 import NewRecipeForm from './components/forms/NewRecipeForm.jsx';
 import './index.css';
 
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -37,7 +38,7 @@ const theme = createTheme({
 
 function App() {
   return (
-    <div>
+    <div className='custom-cursor'>
       <ThemeProvider theme={theme}>
         <header>
           <NavBar />

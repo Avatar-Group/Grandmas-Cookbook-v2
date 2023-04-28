@@ -66,7 +66,7 @@ const NavBar = () => {
 
   return (
     <div>
-      <AppBar>
+      <AppBar color="primary">
         <Toolbar>{loggedIn ? logoutButton : loginButton}</Toolbar>
       </AppBar>
     </div>
