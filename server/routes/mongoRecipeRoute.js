@@ -41,8 +41,8 @@ router.delete(
 );
 
 // increment yumdVote count for recipe
-router.post(
-  '/updateRecipe/:recipeId',
+router.patch(
+  '/yumRecipe/:recipeId',
   recipeController.upVoteRecipe,
   (req, res) => {
     console.log('end of up vote recipe route');
@@ -51,11 +51,31 @@ router.post(
 );
 
 // increment ewwdVote count for recipe
-router.post(
-  '/updateRecipe/:recipeId',
+router.patch(
+  '/ewwRecipe/:recipeId',
   recipeController.downVoteRecipe,
   (req, res) => {
     console.log('end of down vote recipe route');
+    res.status(200).json(res.locals.downVoteRecipe);
+  }
+);
+
+// decrement yumdVote count for recipe
+router.patch(
+  '/yumRecipeRemove/:recipeId',
+  recipeController.deleteUpVoteRecipe,
+  (req, res) => {
+    console.log('end of remove up vote recipe route');
+    res.status(200).json(res.locals.upVoteRecipe);
+  }
+);
+
+// decrement ewwdVote count for recipe
+router.patch(
+  '/ewwRecipeRemove/:recipeId',
+  recipeController.deleteDownVoteRecipe,
+  (req, res) => {
+    console.log('end of remove down vote recipe route');
     res.status(200).json(res.locals.downVoteRecipe);
   }
 );

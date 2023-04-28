@@ -1,13 +1,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const mongoose = require('mongoose');
-// eslint-disable-next-line import/no-import-module-exports
-// const Recipe = require('./recipeModel') ;
 // https://mongoosejs.com/docs/schematypes.html#maps
 
 const userSchema = new mongoose.Schema({
   googleId: {
     type: String,
-    unique: true
+    unique: true,
   },
   email: {
     type: String,
@@ -31,14 +29,6 @@ const userSchema = new mongoose.Schema({
     type: Map,
     of: mongoose.Schema.Types.ObjectId,
     ref: 'Recipe',
-  },
-  userYumdVotes: {
-    type: Number,
-    default: 0,
-  },
-  userEwwdVotes: {
-    type: Number,
-    default: 0,
   },
 });
 

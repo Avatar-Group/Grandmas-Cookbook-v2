@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import { Typography, AppBar, Container, Toolbar, MuiPaper } from '@mui/material';
+import {
+  Typography,
+  AppBar,
+  Container,
+  Toolbar,
+  MuiPaper,
+} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CardGrid from './containers/cardGrid.jsx';
-import NavBar from './components/appBar/AppBar.jsx'
+import NavBar from './components/appBar/AppBar.jsx';
+import NewRecipeForm from './components/forms/NewRecipeForm.jsx';
+import './index.css';
 
 const theme = createTheme({
   palette: {
@@ -16,14 +24,15 @@ const theme = createTheme({
       main: '#CB997E',
     },
   },
-  components: { 
-    MuiPaper: { 
-      styleOverrides: { 
+  components: {
+    MuiPaper: {
+      styleOverrides: {
         root: {
-          'background': '#DDBEA9',
-        }
-      }
-    }}
+          background: '#DDBEA9',
+        },
+      },
+    },
+  },
 });
 
 function App() {
@@ -43,12 +52,7 @@ function App() {
         </header>
         <CardGrid />
       </ThemeProvider>
-      <div className='testing-section'>
-        <h1>START TEST SECTION</h1>
-    
-      </div>
     </div>
-    
   );
 }
 
