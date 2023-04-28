@@ -122,7 +122,7 @@ userController.updateUserYumdVotes = async (req, res, next) => {
     const recipe = user.postedRecipes.get(recipeId)
 
     // add recipe to yumdRecipe field
-    user.yumdRecipes.set(recipeId, recipe);
+    user.yumdRecipes.set(recipeId, recipeId);
 
     // increment user yumd vote 
     user.userYumdVotes += 1;
@@ -149,7 +149,7 @@ userController.updateUserEwwdVotes = async (req, res, next) => {
     const recipe = user.postedRecipes.get(recipeId)
 
     // add recipe to ewwdRecipe field
-    user.ewwdRecipes.set(recipeId, recipe);
+    user.ewwdRecipes.set(recipeId, recipeId);
 
     // increment user ewwd vote 
     user.userEwwdVotes += 1;
@@ -195,6 +195,26 @@ userController.logout = async (req, res, next) => {
     return next({
       log: 'error with user logout, check userController.logout',
       message: { err: 'User did not log out' }
+    })
+  }
+}
+
+userController.getUserByGoogleId = async (req, res, next) => {
+  console.log('in getUserByGoogleId')
+  console.log('req.user in getUserByGoogleId', req.user);
+  try {
+    if (!req.user) res.redirect('/');
+    const googleId = req.user.id;
+    // query db for use whose googleId matches googleId
+    const user = await User.findOne({ googleId });
+    if (!user) throw new Error();
+    console.log('found the user based on google id', user);
+    res.locals.user = user;
+    return next();
+  } catch (err) {
+    return next({
+      log: 'error with finding user by google id, check userController.getUserByGoogleId',
+      message: { err: 'Could not find user by google id' }
     })
   }
 }

@@ -8,7 +8,7 @@ const User = require('../models/userModel')
 
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {
-    console.log('serializeUser', user);
+    // console.log('serializeUser', user);
     done(null, user);
   });
 
@@ -31,10 +31,10 @@ module.exports = (passport) => {
       // console.log('here is the profile:', profile);
       const user = await User.findOne({ googleId: profile.id , email: profile._json.email });
       if (!user) await User.create({ googleId: profile.id, email: profile._json.email });
-      done(null, profile);
+      return done(null, profile);
     } catch (err) {
       console.error(err);
-      done(err);
+      return done(err);
     }
   }),
 
