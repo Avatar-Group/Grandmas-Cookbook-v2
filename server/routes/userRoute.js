@@ -1,12 +1,20 @@
 const router = require('express').Router();
 const userController = require('../controller/userController');
 
-console.log(baseurl);
 
 // get user's one recipe
 router.get('/userRecipe/:id', userController.getUserOneRecipe, (req, res) => {
   console.log("end of get user's one recipe");
   res.status(200).json(res.locals.recipe);
+});
+
+// create recipe in user's posted recipe list
+router.put('/userRecipe/:recipeId', (req, res, next) => {
+  console.log(`testing IN BE`);
+  return next()
+},userController.updateUserPostedRecipes, (req, res) => {
+  console.log("end of route for add recipe to user\'s recipe list");
+  res.status(200).json(req.user);
 });
 
 // update user's yumdRecipe recipe
@@ -59,11 +67,13 @@ router.delete(
   }
 );
 
+// delete user logged in status
 router.delete('/logoutUser', userController.logout, (req, res) => {
   console.log('end of user/logout route');
   res.status(200).json({ message: 'logged out' });
 });
 
+// set user googleId into state
 router.get(
   '/getUserByGoogleId',
   userController.getUserByGoogleId,
@@ -72,6 +82,7 @@ router.get(
     res.status(200).json(res.locals.user);
   }
 );
+
 
 module.exports = router;
 

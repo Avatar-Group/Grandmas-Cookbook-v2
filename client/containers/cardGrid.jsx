@@ -57,7 +57,7 @@ function CardGrid() {
         throw new Error(res.status);
       })
       .then((data) => {
-        console.log(`inside of fetch request for get all recipes FRONT END`)
+        // console.log(`inside of fetch request for get all recipes FRONT END`)
         dispatch(init(data));
       })
       .catch((err) => console.log(`Error code: ${err}`));

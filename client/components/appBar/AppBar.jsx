@@ -23,7 +23,9 @@ const NavBar = () => {
     // for the user by googleId in the database
     fetch('/user/getUserByGoogleId', { method: 'GET' })
       .then((res) => {
-        if (res.ok) return res.json();
+        if (res.ok) {
+          return res.json();
+        }
         throw new Error(res.status);
       })
       .then((data) => {

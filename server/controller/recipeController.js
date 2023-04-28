@@ -7,7 +7,7 @@ const recipeController = {};
 // get all recipes
 recipeController.getAllRecipes = async (req, res, next) => {
   try {
-    console.log(`inside of get all recipes controller`);
+    // console.log(`inside of get all recipes controller`);
     const getRecipes = await Recipe.find({});
     res.locals.allRecipes = getRecipes;
     return next();
