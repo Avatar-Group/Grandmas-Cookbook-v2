@@ -78,9 +78,16 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 
+// statically serve style files, images
+app.use('/imgs', express.static(path.join(__dirname, '../client/images')));
+app.use('/style',express.static(path.join(__dirname, '../client/scss')));
+
 /*
- * To-Do: Add a 404 page backup route
+ * To-Do: Add a 404 page backup route - MUST BE MOUNTED LAST 
  */
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, '../notFound.html'));
+});
 
 app.use((err, req, res, next) => {
   const defaultErr = {

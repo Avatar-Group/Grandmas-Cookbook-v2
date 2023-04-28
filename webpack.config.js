@@ -80,6 +80,7 @@ module.exports = {
       '/tasty': 'http://localhost:3000',
       '/auth/google': 'http://localhost:3000',
       '/users': 'http://localhost:3000',
+      '/': 'http://localhost:3000',
     },
   },
 };

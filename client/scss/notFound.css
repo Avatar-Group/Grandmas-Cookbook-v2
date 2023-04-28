@@ -1,24 +1,21 @@
 body {
-    background-color: $ternary;
+    background-color: #CB997E;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 #cabbage {
     margin: auto;
-    width: 50%;
+    width: 100%;
     text-align: center;
 }
 img {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
-  }
-
-
-// h1 {
-//     color: $primary
-// }
-
-
+    width: 65%;
+}
+.warning {
+    text-align: center;
+    font-family: 'Herculanum', 'Michroma';
+}
