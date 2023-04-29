@@ -1,32 +1,24 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Tooltip } from '@mui/material';
 import { updateCard } from '../../slices/cardSlice';
 
 export default function MoreButton({ recipe }) {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState('paper');
 
-  //   useEffect(() => {
-  //     if (page) dispatch(getPosts(page));
-  // }, [canEdit, page]);
-
-  //   useEffect(() =>
-  //     if (page) dispatch(getPosts(page));
-  // }, [dispatch, page]);
-
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state);
 
   const [saveEditButton, setSaveEditButton] = React.useState('Edit');
   const [canEdit, setCanEdit] = React.useState(false);
-
-  // const [ingredientList, setIngredientList] = React.useState(recipe.ingredientList ? recipe.ingredientList.join('\n') : '');
-  // const [directions, setDirections] = React.useState(recipe.direction ? recipe.directions.join('\n') : '');
 
   function setSaveEditButtonLogic() {
     if (saveEditButton === 'Edit') {
@@ -38,10 +30,6 @@ export default function MoreButton({ recipe }) {
 
   const canEditLogic = () => {
     if (canEdit) {
-      // console.log(
-      //   'ingredientText',
-      //   document.getElementById(`${recipe.id}ingredientText`).textContent
-      // );
       setSaveEditButton('Edit');
       fetch(`/recipe/update/${recipe._id}`, {
         method: 'PUT',
@@ -64,7 +52,6 @@ export default function MoreButton({ recipe }) {
           throw new Error(res.status);
         })
         .then((data) => {
-          // console.log(data);
           // setting updated recipe information to the cardSlice file
           dispatch(updateCard(data));
         })
@@ -93,10 +80,17 @@ export default function MoreButton({ recipe }) {
   }, [open]);
 
   return (
-    <div>
-      <Button color="success" onClick={handleClickOpen('paper')}>
-        More
-      </Button>
+    <>
+      <Tooltip title="More Info">
+        <Button
+          variant="contained"
+          size="small"
+          onClick={handleClickOpen('paper')}
+          sx={{ minWidth: '25px' }}
+        >
+          <ReadMoreIcon sx={{ color: 'black' }} />
+        </Button>
+      </Tooltip>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -134,14 +128,17 @@ export default function MoreButton({ recipe }) {
         </DialogContent>
 
         <DialogActions>
-          <Button color="success" onClick={canEditLogic}>
-            {saveEditButton}
-          </Button>
+          {user.postedRecipes &&
+            Object.hasOwn(user.postedRecipes, recipe._id) && (
+              <Button color="success" onClick={canEditLogic}>
+                {saveEditButton}
+              </Button>
+            )}
           <Button color="warning" onClick={handleClose}>
             Close
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }

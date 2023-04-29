@@ -79,7 +79,7 @@ module.exports = {
       '/recipe': 'http://localhost:3000',
       '/tasty': 'http://localhost:3000',
       '/auth/google': 'http://localhost:3000',
-      '/users': 'http://localhost:3000',
+      '/user': 'http://localhost:3000',
     },
   },
 };

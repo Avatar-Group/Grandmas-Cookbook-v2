@@ -3,11 +3,14 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import { useDispatch } from 'react-redux'
 import UrlAddForm from '../forms/urlAddForm.jsx';
 import { clearKeywordResult } from '../../slices/modalSlice.js';
 import APIAddForm from '../forms/ApiAddForm.jsx';
+import NewRecipeForm from '../forms/NewRecipeForm.jsx';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,6 +47,7 @@ export default function BasicTabs() {
         >
           <Tab label="Food Network or Epicurious" />
           <Tab label="Keyword Search" />
+          <Tab label ="Create Recipe" />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -51,6 +55,9 @@ export default function BasicTabs() {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <APIAddForm/>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <NewRecipeForm/>
       </TabPanel>
     </Box>
   );

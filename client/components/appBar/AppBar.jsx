@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, AppBar, Button, Container, Toolbar, Avatar } from '@mui/material';
+import { Typography, AppBar, Button, Toolbar, Avatar } from '@mui/material';
 import { initUser, userLoggedIn } from '../../slices/userSlice';
 
 
@@ -11,8 +11,6 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const userState = useSelector(state => state.user);
   const { loggedIn, userImgSrc } = userState;
-  console.log(userImgSrc);
-  console.log(userState);
   
   // when the button is clicked, it needs to make a get request to /auth/google
   // to trigger oauth, and then dispatch initUser and userLoggedIn(true)
@@ -21,7 +19,10 @@ const NavBar = () => {
   // and dispatch initUser(null) and userLoggedIn(false)
 
   useEffect(() => {
-    fetch('/users/getUserByGoogleId', { method: 'GET' })
+    // fetch the specific user
+    // build a getUserByGoogleId middleware which uses req.user.id to search
+    // for the user by googleId in the database
+    fetch('/user/getUserByGoogleId', { method: 'GET' })
       .then((res) => {
         if (res.ok) return res.json();
         throw new Error(res.status);
@@ -34,7 +35,7 @@ const NavBar = () => {
   }, []);
 
   const handleLogout = () => {
-    fetch('/users/logoutUser', { method: 'DELETE' })
+    fetch('/user/logoutUser', { method: 'DELETE' })
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -47,17 +48,13 @@ const NavBar = () => {
           dispatch(userLoggedIn(false));
         }
       })
-      .catch((err) => console.log(`Error code: ${err}`))
-  }
+      .catch((err) => console.log(`Error code: ${err}`));
+  };
 
   const logoutButton = (
-    <Button 
-    color="secondary" 
-    variant="contained"
-    onClick={handleLogout}
-  >
-    Logout
-  </Button> 
+    <Button color="secondary" variant="contained" onClick={handleLogout}>
+      Logout
+    </Button>
   );
 
   const loginButton = (
@@ -69,7 +66,8 @@ const NavBar = () => {
   </Button>
   )
 
-    return (<div>
+  return (
+    <div>
       <AppBar>
         <Toolbar style={{display: "flex", flexDirection: "row", justifyContent: "space-between",}}>
           { loggedIn ? logoutButton : loginButton }
@@ -80,7 +78,8 @@ const NavBar = () => {
         </Toolbar>
 
       </AppBar>
-    </div>)
-}
+    </div>
+  );
+};
 
 export default NavBar;
