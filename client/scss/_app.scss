@@ -1,6 +1,23 @@
+@import '_variables';
+/****** Start of ADD COMPONENT HERE styling ******/
+
+/****** End of ADD COMPONENT HERE styling ******/
+
 body {
     background-color: $ternary;
     display: flex;
     flex-direction: column;
 }
 
+button:hover {
+    cursor: url('https://i.imgur.com/mYW4wI5.png'), auto;
+}
+  
+.navBar {
+height: auto;
+position: fixed;
+}
+
+.card-title {
+    @include commonFlexSettings;
+}

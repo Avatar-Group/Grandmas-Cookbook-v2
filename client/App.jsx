@@ -40,7 +40,7 @@ function App() {
   return (
     <div className='custom-cursor'>
       
-      <ThemeProvider theme={theme} className='theme'>
+      <ThemeProvider theme={theme} >
         <NavBar className='navBar'/>
           <div className="actionHeader">
             <Typography align="center" variant="h1" color="primary">

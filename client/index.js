@@ -7,7 +7,7 @@ import cardReducer from './slices/cardSlice';
 import modalReducer from './slices/modalSlice';
 import userReducer from './slices/userSlice';
 
-import styles from './scss/application.scss'
+import './scss/application.scss'
 
 
 const store = configureStore({

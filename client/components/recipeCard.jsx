@@ -111,7 +111,7 @@ function RecipeCard({ recipe, children, type, addHandler }) {
   return (
     <Card
       sx={{
-        minWidth: 400,
+        minWidth: 258,
         border: 'none',
         background: '#DDBEA9',
       }}
@@ -124,9 +124,11 @@ function RecipeCard({ recipe, children, type, addHandler }) {
         image={recipe.imagePath}
       />
       <CardContent>
-        <Typography variant="h6" component="div">
-          {recipe.title}
-        </Typography>
+        <div className='card-title'>
+          <Typography variant="h6" component="div">
+            {recipe.title}
+          </Typography>
+        </div>
       </CardContent>
       <CardActions>
         <Stack direction="row" spacing={1}>
