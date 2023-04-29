@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, AppBar, Button, Toolbar, Avatar } from '@mui/material';
-import { initUser, userLoggedIn } from '../../slices/userSlice';
-
+import { AppBar, Button, Toolbar, Avatar, Typography } from '@mui/material';
+import { initUser, userLoggedIn, logoutUser } from '../../slices/userSlice';
 
 // eslint-disable-next-line react/function-component-definition
 const NavBar = () => {
@@ -24,11 +23,13 @@ const NavBar = () => {
     // for the user by googleId in the database
     fetch('/user/getUserByGoogleId', { method: 'GET' })
       .then((res) => {
-        if (res.ok) return res.json();
+        if (res.ok) {
+          return res.json();
+        }
         throw new Error(res.status);
       })
       .then((data) => {
-        dispatch(initUser({ _id: data._id, userImgSrc: data.userImgSrc }));
+        dispatch(initUser(data));
         dispatch(userLoggedIn(true));
       })
       .catch((err) => console.log(`Error code: ${err}`));
@@ -44,8 +45,8 @@ const NavBar = () => {
       })
       .then((data) => {
         if (data.message) {
-          dispatch(initUser({ _id: null, userImgSrc: null }));
-          dispatch(userLoggedIn(false));
+          console.log(data);
+          dispatch(logoutUser());
         }
       })
       .catch((err) => console.log(`Error code: ${err}`));
@@ -71,9 +72,10 @@ const NavBar = () => {
       <AppBar>
         <Toolbar style={{display: "flex", flexDirection: "row", justifyContent: "space-between",}}>
           { loggedIn ? logoutButton : loginButton }
-          <Typography align="center" variant="h4" color="secondary">
-            Grandma's Cookbook
-          </Typography>
+          {/* <Typography align="center" variant="h4" color="secondary">
+            Avatar's Cookbook
+          </Typography> */}
+          <h1>Avatar's Cookbook</h1>
           <Avatar src={userImgSrc} />
         </Toolbar>
 

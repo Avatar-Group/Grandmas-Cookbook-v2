@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import { TextField, Button, Box, Typography, Backdrop, CircularProgress, Alert} from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux'
-import { setKeywordResult } from '../../slices/modalSlice.js';
+import { setKeywordResult, toggleModalOn, toggleModalOff } from '../../slices/modalSlice.js';
 import { addCard } from '../../slices/cardSlice'
 import RecipeCard from '../recipeCard.jsx';
 
-function APIAddForm() {
+function APIAddForm({ setOpenAddRecipe }) {
     const keywordFieldValue = useRef('');
     const tagFieldValue = useRef('');
     const dispatch = useDispatch();
@@ -39,7 +39,11 @@ function APIAddForm() {
                 throw new Error(res.status);
               })
             // updates state in the cardSlice reducer by adding current data(recipe) as the payload
-            .then(data => dispatch(addCard(data)))
+            .then(data => {
+                console.log(`this is data from our fetch request: ${data}`)
+                dispatch(addCard(data))
+            }
+                )
             .then(() => handleClose())
             .catch(() => {
                 setQueryError(true);
@@ -95,6 +99,7 @@ function APIAddForm() {
                     cardArr.push(<RecipeCard key={title} type='addForm' recipe={data[i]} addHandler={addHandler} />)
                 }
                 dispatch(setKeywordResult(cardArr))
+                setOpenAddRecipe(false);
             })
             .then(() => handleClose())
             .catch((err) => {

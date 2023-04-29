@@ -6,9 +6,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tooltip } from '@mui/material';
-import { updateCard } from '../../slices/cardSlice';
+import { deleteCard,updateCard } from '../../slices/cardSlice';
+import {deleteUserRecipe} from '../../slices/userSlice';
 
 export default function MoreButton({ recipe }) {
   const [open, setOpen] = React.useState(false);
@@ -59,6 +61,26 @@ export default function MoreButton({ recipe }) {
     } else setSaveEditButton('Save');
     setCanEdit((state) => !state);
   };
+
+  const setDeleteButtonLogic = async () => {
+    try {
+      const recipeRes = await fetch(`/recipe/delete/${recipe._id}`, {
+        method: 'DELETE',
+      });
+      const userRes = await fetch(`/user/postedRecipe/${recipe._id}`, {
+        method: 'DELETE',
+      });
+      if (recipeRes.ok && userRes.ok) {
+        dispatch(deleteCard(recipe));
+        dispatch(deleteUserRecipe(recipe));
+        return;
+      }
+      throw new Error(recipeRes.status + userRes.status);
+    } catch (err) {
+      console.log(`Error code: ${err}`);
+    }
+  };
+
 
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
@@ -128,6 +150,18 @@ export default function MoreButton({ recipe }) {
         </DialogContent>
 
         <DialogActions>
+          {user.postedRecipes &&
+            Object.hasOwn(user.postedRecipes, recipe._id) && (
+              <Tooltip title="Delete Recipe">
+                <Button
+                  size="small"
+                  onClick={setDeleteButtonLogic}
+                  sx={{ color: 'red' }}
+                >
+                  Delete {/* <DeleteForeverIcon sx={{ color: 'red' }} /> */}
+                </Button>
+              </Tooltip>
+            )}
           {user.postedRecipes &&
             Object.hasOwn(user.postedRecipes, recipe._id) && (
               <Button color="success" onClick={canEditLogic}>

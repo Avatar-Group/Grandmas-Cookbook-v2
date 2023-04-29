@@ -21,7 +21,7 @@ userController.getUserOneRecipe = async (req, res, next) => {
     }
     res.locals.recipe = recipe;
     return next();
-  } catch (err) {
+    } catch (err) {
     return next({
       log: 'error occured in userController.getUserOneRecipe',
       status: 500,
@@ -30,6 +30,7 @@ userController.getUserOneRecipe = async (req, res, next) => {
   }
 };
 
+// update user's yumdRecipes
 // update user's yumdRecipes
 userController.updateUserYumdVotes = async (req, res, next) => {
   const { recipeId } = req.params;
@@ -166,12 +167,15 @@ userController.logout = async (req, res, next) => {
   }
 };
 
+// a user must be logged in for this route to work, or else server will respond with a 504 error
 userController.getUserByGoogleId = async (req, res, next) => {
   try {
     if (!req.user) res.redirect('/');
     const googleId = req.user.id;
+    // console.log(`This is current googleId: ${googleId}`);
     // query db for use whose googleId matches googleId
     const user = await User.findOne({ googleId });
+    // ERROR IS IN HERE
     if (!user) throw new Error();
     res.locals.user = user;
     return next();

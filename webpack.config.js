@@ -76,10 +76,11 @@ module.exports = {
      */
     historyApiFallback: true,
     proxy: {
-      '/recipe': 'http://localhost:3000',
-      '/tasty': 'http://localhost:3000',
-      '/auth/google': 'http://localhost:3000',
-      '/user': 'http://localhost:3000',
+      // '/recipe': 'http://localhost:3000',
+      // '/tasty': 'http://localhost:3000',
+      // '/auth/google': 'http://localhost:3000',
+      // '/user': 'http://localhost:3000',
+      '/': 'http://localhost:3000',
     },
   },
 };

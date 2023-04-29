@@ -1,3 +1,17 @@
+// declare common variables to use
 $primary: #FFE8D6;
 $secondary: #DDBEA9;
 $ternary: #CB997E;
+
+$base-color1: #85C7F2;
+$base-color2: #DBDBDB;
+$base-color3: #636363;
+
+// creating mixins:
+@mixin commonFlexSettings {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  overflow: auto;
+}

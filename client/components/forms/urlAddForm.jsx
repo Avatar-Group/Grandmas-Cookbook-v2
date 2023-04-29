@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import { TextField, Button, Box, Typography, CircularProgress, Backdrop, Alert} from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux'
-import { setUrlResult, clearUrlResult } from '../../slices/modalSlice';
+import { setUrlResult, clearUrlResult, toggleModalOn, toggleModalOff } from '../../slices/modalSlice';
 import { addCard } from '../../slices/cardSlice'
 
-function UrlAddForm() {
+function UrlAddForm({ setOpenAddRecipe }) {
     const fieldValue = useRef('');
     const dispatch = useDispatch();
     const {urlScrape} = useSelector(state=>state.modal)
@@ -34,6 +34,7 @@ function UrlAddForm() {
         .then(() => handleClose())
         .catch(() => {
             setQueryError(true);
+            setOpenAddRecipe(false);
             handleClose()
         })
     };
