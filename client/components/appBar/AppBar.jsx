@@ -64,7 +64,7 @@ const NavBar = () => {
     <Button 
     color="secondary" 
     variant="contained"
-  >
+    >
     <a href='/auth/google' style={{textDecoration: 'none', color: 'secondary'}}>Login with google</a>
   </Button>
   )
@@ -72,10 +72,7 @@ const NavBar = () => {
     return (<div>
       <AppBar>
         <Toolbar style={{display: "flex", flexDirection: "row", justifyContent: "space-between",}}>
-        { loggedIn ? 
-            logoutButton : 
-            loginButton
-          }
+          { loggedIn ? logoutButton : loginButton }
           <Typography align="center" variant="h4" color="secondary">
             Grandma's Cookbook
           </Typography>
