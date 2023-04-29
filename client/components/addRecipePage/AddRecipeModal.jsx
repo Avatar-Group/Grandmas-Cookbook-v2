@@ -17,7 +17,7 @@ const boxStyle = {
   p: 4,
 };
 
-export default function AddRecipeModal({ open, handleClose }) {
+export default function AddRecipeModal({ open, handleClose, setOpenAddRecipe }) {
   return (
     <Modal
       open={open}
@@ -30,7 +30,7 @@ export default function AddRecipeModal({ open, handleClose }) {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Recipes
         </Typography>
-        <AddRecipeTab />
+        <AddRecipeTab setOpenAddRecipe={setOpenAddRecipe} />
         <Button color="warning" onClick={handleClose}>
           Close
         </Button>

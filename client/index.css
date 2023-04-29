@@ -6,5 +6,15 @@
 
 /****** End of ADD COMPONENT HERE styling ******/
 .custom-cursor {
-  cursor: url('https://i.imgur.com/TwoFFIp.png'), auto;
+  cursor: url('https://i.imgur.com/mYW4wI5.png'), auto;
+}
+
+.navBar {
+  height: auto;
+  position: fixed;
+}
+
+.theme {
+  display: flex;
+  flex-direction: column;
 }

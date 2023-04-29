@@ -185,6 +185,7 @@ function CardGrid() {
               <AddRecipeModal
                 open={openAddRecipe}
                 handleClose={handleCloseAddRecipe}
+                setOpenAddRecipe={setOpenAddRecipe}
               />
             </Grid>
           </Grid>

@@ -10,7 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CardGrid from './containers/cardGrid.jsx';
 import NavBar from './components/appBar/AppBar.jsx';
 import NewRecipeForm from './components/forms/NewRecipeForm.jsx';
-import './index.css';
+// import './index.css';
 
 
 const theme = createTheme({
@@ -39,18 +39,18 @@ const theme = createTheme({
 function App() {
   return (
     <div className='custom-cursor'>
-      <ThemeProvider theme={theme}>
-        <header>
-          <NavBar />
-          <Typography align="center" variant="h1" color="primary">
-            Grandma's Cookbook
-          </Typography>
+      
+      <ThemeProvider theme={theme} className='theme'>
+        <NavBar className='navBar'/>
           <div className="actionHeader">
+            <Typography align="center" variant="h1" color="primary">
+              Grandma's Cookbook
+            </Typography>
             <Typography variant="h2" align="center" color="primary">
               Recipes
             </Typography>
           </div>
-        </header>
+        
         <CardGrid />
       </ThemeProvider>
     </div>

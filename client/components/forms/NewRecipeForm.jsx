@@ -5,11 +5,11 @@ import { Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { createUserRecipe } from '../../slices/userSlice';
 import { addCard } from '../../slices/cardSlice';
+// tried to setup modal toggle in modal slice
+import { toggleModalOn, toggleModalOff } from '../../slices/modalSlice';
 
-function NewRecipeForm() {
+function NewRecipeForm({ setOpenAddRecipe }) {
   // access the recipes array state 
-  const { card } = useSelector((state) => state); 
-  const latestRecipe = card.recipes[card.recipes.length - 1];
   const { user } = useSelector((state) => state);
 
   const dispatch = useDispatch();
@@ -38,6 +38,9 @@ function NewRecipeForm() {
 
         const addToUser = await fetch(`/user/userRecipe/${recipe._id}`, { method: 'PUT' })
         dispatch(createUserRecipe(recipe))
+        // close 'add new recipe' popup
+        setOpenAddRecipe(false);
+        // dispatch(toggleModalOff());
     }
     catch(err) {
       console.error(err);

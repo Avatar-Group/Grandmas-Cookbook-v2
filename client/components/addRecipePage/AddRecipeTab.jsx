@@ -28,8 +28,9 @@ function TabPanel(props) {
   );
 }
 
-export default function BasicTabs() {
+export default function AddRecipeTab({ setOpenAddRecipe }) {
   const [value, setValue] = React.useState(0);
+  const { recipesTabToggle, setRecipesTabToggle} = React.useState(false);
   const dispatch = useDispatch();
 
   const handleChange = (event, newValue) => {
@@ -51,13 +52,13 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <UrlAddForm/>
+        <UrlAddForm setOpenAddRecipe={setOpenAddRecipe} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <APIAddForm/>
+        <APIAddForm setOpenAddRecipe={setOpenAddRecipe} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <NewRecipeForm/>
+        <NewRecipeForm setOpenAddRecipe={setOpenAddRecipe} />
       </TabPanel>
     </Box>
   );
