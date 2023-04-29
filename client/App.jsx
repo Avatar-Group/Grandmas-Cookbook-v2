@@ -16,24 +16,23 @@ import NewRecipeForm from './components/forms/NewRecipeForm.jsx';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#FFE8D6',
+      main: '#8B4513',
     },
     secondary: {
-      main: '#DDBEA9',
+      main: '#FFEBCD',
     },
     ternary: {
-      main: '#CB997E',
+      main: '#FFFFE0',
     },
   },
   components: {
     MuiPaper: {
       styleOverrides: {
         root: {
-          background: '#CB997E',
-        },
-      },
-    },
-  },
+          'background': '#FFEBCD',
+        }
+      }
+    }}
 });
 
 function App() {

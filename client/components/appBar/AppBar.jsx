@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppBar, Button, Toolbar } from '@mui/material';
+import { AppBar, Button, Toolbar, Avatar, Typography } from '@mui/material';
 import { initUser, userLoggedIn, logoutUser } from '../../slices/userSlice';
 
 // eslint-disable-next-line react/function-component-definition
@@ -8,9 +8,9 @@ const NavBar = () => {
   // this component needs to subscribe to state from userSlice 'userLoggedIn'
   // and conditionally render a logout button if userLoggedIn is true
   const dispatch = useDispatch();
-  const userState = useSelector((state) => state.user);
-  const { loggedIn } = userState;
-
+  const userState = useSelector(state => state.user);
+  const { loggedIn, userImgSrc } = userState;
+  
   // when the button is clicked, it needs to make a get request to /auth/google
   // to trigger oauth, and then dispatch initUser and userLoggedIn(true)
 
@@ -53,29 +53,32 @@ const NavBar = () => {
   };
 
   const logoutButton = (
-    <Button color="ternary" variant="contained" onClick={handleLogout}>
+    <Button color="secondary" variant="contained" onClick={handleLogout}>
       Logout
     </Button>
   );
 
   const loginButton = (
-    <Button color="ternary" variant="contained">
-      <a href="/auth/google">Login with google</a>
-    </Button>
-  );
+    <Button 
+    color="secondary" 
+    variant="contained"
+    >
+    <a href='/auth/google' style={{textDecoration: 'none', color: 'secondary'}}>Login with google</a>
+  </Button>
+  )
 
   return (
-    <div >
-      <AppBar color="primary">
-        <Toolbar sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}>
-          {loggedIn ? logoutButton : loginButton}
-
-          <h1>Avatar's Cookbook</h1>  
-          <div></div>
+    <div>
+      <AppBar>
+        <Toolbar style={{display: "flex", flexDirection: "row", justifyContent: "space-between",}}>
+          { loggedIn ? logoutButton : loginButton }
+          {/* <Typography align="center" variant="h4" color="secondary">
+            Avatar's Cookbook
+          </Typography> */}
+          <h1>Avatar's Cookbook</h1>
+          <Avatar src={userImgSrc} />
         </Toolbar>
+
       </AppBar>
     </div>
   );

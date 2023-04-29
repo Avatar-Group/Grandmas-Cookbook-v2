@@ -152,14 +152,9 @@ function RecipeCard({ recipe, children, type, addHandler }) {
           </Button>
         </Stack>
       </CardActions>
-
-      <CardContent>
         <div className='card-title'>
-          <Typography variant="h6" component="div">
-            {recipe.title}
-          </Typography>
+          <h2 className="recipe-title">{recipe.title}</h2>
         </div>
-      </CardContent>
       {/* {children} */}
     </Card>
   );

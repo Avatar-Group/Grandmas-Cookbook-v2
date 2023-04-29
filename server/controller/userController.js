@@ -21,7 +21,7 @@ userController.getUserOneRecipe = async (req, res, next) => {
     }
     res.locals.recipe = recipe;
     return next();
-  } catch (err) {
+    } catch (err) {
     return next({
       log: 'error occured in userController.getUserOneRecipe',
       status: 500,
@@ -30,6 +30,7 @@ userController.getUserOneRecipe = async (req, res, next) => {
   }
 };
 
+// update user's yumdRecipes
 // update user's yumdRecipes
 userController.updateUserYumdVotes = async (req, res, next) => {
   const { recipeId } = req.params;
@@ -84,11 +85,8 @@ userController.deleteUserPostedRecipe = async (req, res, next) => {
 };
 // update user's posted recipes
 userController.updateUserPostedRecipes = async (req, res, next) => {
-  
   const { recipeId } = req.params;
   try {
-    console.log(`inside of updateUserpostedRecipe, recipeId: ${recipeId}`);
-    console.log(`inside of updateUserpostedRecipe, current user: ${req.user.id}`);
     const user = await User.findOne({ googleId: req.user.id });
 
     // add recipe to user's profile
@@ -188,8 +186,6 @@ userController.getUserByGoogleId = async (req, res, next) => {
     });
   }
 };
-
-
 
 module.exports = userController;
 

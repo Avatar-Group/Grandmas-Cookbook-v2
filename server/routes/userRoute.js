@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const userController = require('../controller/userController');
+const baseurl = require('../server');
 
+console.log(baseurl);
 
 // get user's one recipe
 router.get('/userRecipe/:id', userController.getUserOneRecipe, (req, res) => {
@@ -9,10 +11,7 @@ router.get('/userRecipe/:id', userController.getUserOneRecipe, (req, res) => {
 });
 
 // create recipe in user's posted recipe list
-router.put('/userRecipe/:recipeId', (req, res, next) => {
-  console.log(`testing IN BE`);
-  return next()
-},userController.updateUserPostedRecipes, (req, res) => {
+router.put('/userRecipe/:recipeId', userController.updateUserPostedRecipes, (req, res) => {
   console.log("end of route for add recipe to user\'s recipe list");
   res.status(200).json(req.user);
 });

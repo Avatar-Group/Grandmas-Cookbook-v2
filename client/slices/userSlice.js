@@ -7,6 +7,7 @@ const initialState = {
 const userSlice = createSlice({
   name: 'user',
   initialState,
+  initialState,
   reducers: {
     // init user (mongo _id)
     initUser: (state, param) => {
@@ -20,6 +21,7 @@ const userSlice = createSlice({
       const tempState = state;
       tempState.loggedIn = payload;
     },
+    logoutUser: () => initialState,
     logoutUser: () => initialState,
     // created recipes
     createUserRecipe: (state, param) => {
