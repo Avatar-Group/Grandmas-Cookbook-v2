@@ -1,5 +1,3 @@
-import RecipeCard from '../components/recipeCard.jsx'
-
 const { createSlice } = require('@reduxjs/toolkit');
 const React = require('react')
 
@@ -10,6 +8,7 @@ const modalSlice = createSlice({
     initialState: {
         urlScrape: {},
         keywordResults: [],
+        active: false,
     },
 
     reducers: {
@@ -27,9 +26,24 @@ const modalSlice = createSlice({
         clearKeywordResult: (state) => {
             state.keywordResults = [];
         },
+        toggleModalOn: (state = initialState) => {
+            state.active = true;
+        },
+        toggleModalOff: (state = initialState) => {
+            state.active = false;
+        }
     }
 })
 
 const { actions, reducer } = modalSlice;
-export const { setKeywordResult, setUrlResult, clearKeywordResult, clearUrlResult } = actions;
+
+export const { 
+    setKeywordResult, 
+    setUrlResult, 
+    clearKeywordResult, 
+    clearUrlResult, 
+    toggleModalOn, 
+    toggleModalOff 
+} = actions;
+
 export default reducer

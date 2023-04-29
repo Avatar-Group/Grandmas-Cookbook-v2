@@ -23,7 +23,9 @@ const NavBar = () => {
     // for the user by googleId in the database
     fetch('/user/getUserByGoogleId', { method: 'GET' })
       .then((res) => {
-        if (res.ok) return res.json();
+        if (res.ok) {
+          return res.json();
+        }
         throw new Error(res.status);
       })
       .then((data) => {
@@ -63,9 +65,17 @@ const NavBar = () => {
   );
 
   return (
-    <div>
-      <AppBar>
-        <Toolbar>{loggedIn ? logoutButton : loginButton}</Toolbar>
+    <div >
+      <AppBar color="primary">
+        <Toolbar sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}>
+          {loggedIn ? logoutButton : loginButton}
+
+          <h1>Avatar's Cookbook</h1>  
+          <div></div>
+        </Toolbar>
       </AppBar>
     </div>
   );

@@ -1,12 +1,39 @@
+@import '_variables';
+/****** Start of ADD COMPONENT HERE styling ******/
+
+/****** End of ADD COMPONENT HERE styling ******/
+
 body {
     background-color: $ternary;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    
+}
+#cabbage {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+
+button:hover {
+    cursor: url('https://i.imgur.com/mYW4wI5.png'), auto;
+}
+  
+h1 {
+    font-family: 'Herculanum', 'Michroma';
+    font-size: 90px;
+    padding: 0;
+    margin: 10px;
 }
 
-
-// h1 {
-//     color: $primary
-// }
-
-
+a {
+    text-decoration: none;
+    color: black;
+}

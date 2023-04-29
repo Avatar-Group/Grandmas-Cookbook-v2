@@ -5,56 +5,46 @@ import { Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { createUserRecipe } from '../../slices/userSlice';
 import { addCard } from '../../slices/cardSlice';
+// tried to setup modal toggle in modal slice
+import { toggleModalOn, toggleModalOff } from '../../slices/modalSlice';
 
-function NewRecipeForm() {
+function NewRecipeForm({ setOpenAddRecipe }) {
+  // access the recipes array state 
+  const { user } = useSelector((state) => state);
+
   const dispatch = useDispatch();
   // const userId = useSelector(state => state.user._id);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newRecipe = {
-      createdBy: '6445e4fa41d2e2a932a66379',
+      // user id
+      createdBy: user._id,
       title: document.getElementById('recipe-title').value,
       directions: document.getElementById('recipe-directions').value,
       ingredientList: document.getElementById('recipe-ingredients').value,
     };
 
     // console.log('here is the new recipe ------> ', newRecipe);
+    try {
+      const addRecipe = await fetch('/recipe/add', {
+        method: 'POST',
+        body: JSON.stringify(newRecipe),
+        headers: {
+          'Content-type': 'application/json',
+        },
+      })
+        const recipe = await addRecipe.json();
+        dispatch(addCard(recipe));
 
-    fetch('/recipe/add', {
-      method: 'POST',
-      body: JSON.stringify(newRecipe),
-      headers: {
-        'Content-type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw new Error(response.status);
-      })
-      .then((data) => {
-        dispatch(addCard(data));
-      })
-      .catch(() => {
-        console.error('Error in post request for user recipe');
-      });
-
-    fetch('/user/userRecipe/:id', {
-      method: 'POST',
-      body: JSON.stringify(newRecipe),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw new Error(response.status);
-      })
-      .then((data) => {
-        dispatch(createUserRecipe(data));
-      })
-      .catch(() => {
-        console.error('Error in post request for user recipe');
-      });
+        const addToUser = await fetch(`/user/userRecipe/${recipe._id}`, { method: 'PUT' })
+        dispatch(createUserRecipe(recipe))
+        // close 'add new recipe' popup
+        setOpenAddRecipe(false);
+        // dispatch(toggleModalOff());
+    }
+    catch(err) {
+      console.error(err);
+    }
   };
 
   return (

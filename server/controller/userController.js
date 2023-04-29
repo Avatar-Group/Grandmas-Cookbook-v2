@@ -84,8 +84,11 @@ userController.deleteUserPostedRecipe = async (req, res, next) => {
 };
 // update user's posted recipes
 userController.updateUserPostedRecipes = async (req, res, next) => {
+  
   const { recipeId } = req.params;
   try {
+    console.log(`inside of updateUserpostedRecipe, recipeId: ${recipeId}`);
+    console.log(`inside of updateUserpostedRecipe, current user: ${req.user.id}`);
     const user = await User.findOne({ googleId: req.user.id });
 
     // add recipe to user's profile
@@ -166,12 +169,15 @@ userController.logout = async (req, res, next) => {
   }
 };
 
+// a user must be logged in for this route to work, or else server will respond with a 504 error
 userController.getUserByGoogleId = async (req, res, next) => {
   try {
     if (!req.user) res.redirect('/');
     const googleId = req.user.id;
+    // console.log(`This is current googleId: ${googleId}`);
     // query db for use whose googleId matches googleId
     const user = await User.findOne({ googleId });
+    // ERROR IS IN HERE
     if (!user) throw new Error();
     res.locals.user = user;
     return next();
@@ -182,6 +188,8 @@ userController.getUserByGoogleId = async (req, res, next) => {
     });
   }
 };
+
+
 
 module.exports = userController;
 

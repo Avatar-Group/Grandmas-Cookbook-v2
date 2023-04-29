@@ -8,10 +8,10 @@ router.get('/scrapeurl', scrapingController, (req, res, next) => {
   res.status(200).json(res.locals);
 });
 
-// Get all recipes stored in the database
-router.get('/all', databaseController.getAllRecipes, (req, res, next) => {
-  res.status(200).json(res.locals);
-});
+// // Get all recipes stored in the database
+// router.get('/all', databaseController.getAllRecipes, (req, res, next) => {
+//   res.status(200).json(res.locals);
+// });
 
 // Add a new recipe to the database
 router.post(

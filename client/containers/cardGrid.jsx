@@ -46,12 +46,18 @@ function CardGrid() {
   };
 
   useEffect(() => {
-    fetch('/recipe/all', { method: 'GET' })
+    fetch('/recipe/all', { 
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
       .then((res) => {
         if (res.ok) return res.json();
         throw new Error(res.status);
       })
       .then((data) => {
+        // console.log(`inside of fetch request for get all recipes FRONT END`)
         dispatch(init(data));
       })
       .catch((err) => console.log(`Error code: ${err}`));
@@ -85,7 +91,7 @@ function CardGrid() {
   return (
     <main>
       <div>
-        <Container maxWidth="lg">
+        <Container maxWidth='xl' sx={{marginTop: '150px' }}>
           <Grid container spacing={2}>
             {user.loggedIn && (
               <Grid item xs={12} sx={{ textAlign: 'center' }}>
@@ -156,22 +162,22 @@ function CardGrid() {
             </Grid>
             <Grid item xs={11}>
               <Container className="classes.cardGrid">
-                <Grid container spacing={3}>
+                <Grid container spacing={2}>
                   {filteredRecipes.map((card) => (
-                    <Grid item key={card._id} xs={12} sm={4} md={3}>
-                      <Card
+                    <Grid item key={card._id} >
+                      {/* <Card
                         sx={{
                           height: '100%',
                           display: 'flex',
                           flexDirection: 'column',
                         }}
-                      >
+                      > */}
                         <RecipeCard
                           recipe={card}
                           title={card.title}
                           image={card.imagePath}
                         />
-                      </Card>
+                      {/* </Card> */}
                     </Grid>
                   ))}
                 </Grid>
@@ -179,6 +185,7 @@ function CardGrid() {
               <AddRecipeModal
                 open={openAddRecipe}
                 handleClose={handleCloseAddRecipe}
+                setOpenAddRecipe={setOpenAddRecipe}
               />
             </Grid>
           </Grid>

@@ -69,6 +69,7 @@ const userSlice = createSlice({
 });
 
 const { actions, reducer } = userSlice;
+
 export const {
   initUser,
   userLoggedIn,
@@ -80,4 +81,5 @@ export const {
   deleteEwwdRecipe,
   deleteUserRecipe,
 } = actions;
+
 export default reducer;
