@@ -4,7 +4,7 @@ const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
 const passport = require('passport');
-const googleAuth = require('./auth/google')
+const googleAuth = require('./auth/google');
 const connectDB = require('./config/db');
 require('dotenv').config();
 
@@ -15,7 +15,7 @@ const port = 3000;
 
 googleAuth(passport);
 
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = process.env.NODE_ENV === 'development';
 const baseurl = isDev ? 'http://localhost:8080/' : '/';
 const successRedirect = `${baseurl}`;
 const failureRedirect = `${baseurl}login`;
@@ -23,6 +23,16 @@ const failureRedirect = `${baseurl}login`;
 app.use(cors());
 app.use(express.json());
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    maxAge: 100000000,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 // app.use(session({ 
 //   secret: process.env.SESSION_SECRET,
 //   resave: false,
@@ -68,7 +78,7 @@ const userRouter = require('./routes/userRoute');
 
 app.use('/tasty', tastyRouter);
 app.use('/recipe', recipeRouter);
-app.use('/users', userRouter);
+app.use('/user', userRouter);
 
 // serve index.html on the route '/'.
 // The '/*' is to make sure refresh in browser works with frontend routing (https://ui.dev/react-router-cannot-get-url-refresh)
@@ -103,6 +113,5 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
-
 
 module.exports = baseurl;
