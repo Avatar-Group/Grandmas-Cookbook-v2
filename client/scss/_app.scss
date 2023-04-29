@@ -8,6 +8,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    
 }
 #cabbage {
     margin: auto;
@@ -25,11 +26,14 @@ button:hover {
     cursor: url('https://i.imgur.com/mYW4wI5.png'), auto;
 }
   
-.navBar {
-height: auto;
-position: fixed;
+h1 {
+    font-family: 'Herculanum', 'Michroma';
+    font-size: 90px;
+    padding: 0;
+    margin: 10px;
 }
 
-.card-title {
-    @include commonFlexSettings;
+a {
+    text-decoration: none;
+    color: black;
 }

@@ -91,7 +91,7 @@ function CardGrid() {
   return (
     <main>
       <div>
-        <Container maxWidth="lg">
+        <Container maxWidth='xl' sx={{marginTop: '150px' }}>
           <Grid container spacing={2}>
             {user.loggedIn && (
               <Grid item xs={12} sx={{ textAlign: 'center' }}>
@@ -162,22 +162,22 @@ function CardGrid() {
             </Grid>
             <Grid item xs={11}>
               <Container className="classes.cardGrid">
-                <Grid container spacing={3}>
+                <Grid container spacing={2}>
                   {filteredRecipes.map((card) => (
-                    <Grid item key={card._id} xs={12} sm={4} md={3}>
-                      <Card
+                    <Grid item key={card._id} >
+                      {/* <Card
                         sx={{
                           height: '100%',
                           display: 'flex',
                           flexDirection: 'column',
                         }}
-                      >
+                      > */}
                         <RecipeCard
                           recipe={card}
                           title={card.title}
                           image={card.imagePath}
                         />
-                      </Card>
+                      {/* </Card> */}
                     </Grid>
                   ))}
                 </Grid>

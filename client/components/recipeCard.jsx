@@ -9,40 +9,21 @@ import Typography from '@mui/material/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import MoreButton from './recipeCardButtons/MoreButton.jsx';
-import { deleteCard, updateCard } from '../slices/cardSlice';
+import { updateCard } from '../slices/cardSlice';
 import {
   addYumdRecipe,
   addEwwdRecipe,
-  deleteUserRecipe,
   deleteEwwdRecipe,
   deleteYumdRecipe,
 } from '../slices/userSlice';
+import { Route } from "react-router-dom";
 
 function RecipeCard({ recipe, children, type, addHandler }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
-
-  const setDeleteButtonLogic = async () => {
-    try {
-      const recipeRes = await fetch(`/recipe/delete/${recipe._id}`, {
-        method: 'DELETE',
-      });
-      const userRes = await fetch(`/user/postedRecipe/${recipe._id}`, {
-        method: 'DELETE',
-      });
-      if (recipeRes.ok && userRes.ok) {
-        dispatch(deleteCard(recipe));
-        dispatch(deleteUserRecipe(recipe));
-        return;
-      }
-      throw new Error(recipeRes.status + userRes.status);
-    } catch (err) {
-      console.log(`Error code: ${err}`);
-    }
-  };
 
   // Stuff to switch whether recipe is yum or eww
   const [vote, setVote] = React.useState(null);
@@ -108,12 +89,28 @@ function RecipeCard({ recipe, children, type, addHandler }) {
     }
   };
 
+  // Working on adding 404 link
+  // <Button sx={{ width: '50px' }}>
+          //   <ShareOutlinedIcon 
+          //     onClick={
+          //       <Route 
+          //         exact path='../public/notFound.html'
+          //         render={() => {window.location.href="notFound.html"}}
+          //       />
+          //     }
+          //     sx={{ color: 'black' }}
+          //   />
+          // </Button>
+
   return (
     <Card
       sx={{
         minWidth: 258,
+        maxWidth: 258,
+        minHeight: 420,
         border: 'none',
         background: '#DDBEA9',
+        margin: '5px',
       }}
     >
       <CardMedia
@@ -123,13 +120,7 @@ function RecipeCard({ recipe, children, type, addHandler }) {
         // height="140"
         image={recipe.imagePath}
       />
-      <CardContent>
-        <div className='card-title'>
-          <Typography variant="h6" component="div">
-            {recipe.title}
-          </Typography>
-        </div>
-      </CardContent>
+      
       <CardActions>
         <Stack direction="row" spacing={1}>
           <Tooltip title="Rate Recipe">
@@ -152,22 +143,24 @@ function RecipeCard({ recipe, children, type, addHandler }) {
           </Tooltip>
 
           <MoreButton recipe={recipe} />
-          {user.postedRecipes &&
-            Object.hasOwn(user.postedRecipes, recipe._id) && (
-              <Tooltip title="Delete Recipe">
-                <Button
-                  variant="contained"
-                  size="small"
-                  onClick={setDeleteButtonLogic}
-                  sx={{ minWidth: '25px' }}
-                >
-                  <DeleteForeverIcon sx={{ color: 'red' }} />
-                </Button>
-              </Tooltip>
-            )}
+          <Button 
+            variant="contained"
+            size="small"
+            sx={{ minWidth: '25px' }}
+          >
+            <a href="/error"> <ShareOutlinedIcon sx={{ color: 'black' }}/> </a>
+          </Button>
         </Stack>
       </CardActions>
-      {children}
+
+      <CardContent>
+        <div className='card-title'>
+          <Typography variant="h6" component="div">
+            {recipe.title}
+          </Typography>
+        </div>
+      </CardContent>
+      {/* {children} */}
     </Card>
   );
 }

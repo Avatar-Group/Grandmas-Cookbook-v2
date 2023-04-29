@@ -65,9 +65,17 @@ const NavBar = () => {
   );
 
   return (
-    <div>
+    <div >
       <AppBar color="primary">
-        <Toolbar>{loggedIn ? logoutButton : loginButton}</Toolbar>
+        <Toolbar sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}>
+          {loggedIn ? logoutButton : loginButton}
+
+          <h1>Avatar's Cookbook</h1>  
+          <div></div>
+        </Toolbar>
       </AppBar>
     </div>
   );

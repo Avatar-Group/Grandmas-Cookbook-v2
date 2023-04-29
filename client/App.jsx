@@ -29,7 +29,7 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          background: '#DDBEA9',
+          background: '#CB997E',
         },
       },
     },
@@ -42,14 +42,6 @@ function App() {
       
       <ThemeProvider theme={theme} >
         <NavBar className='navBar'/>
-          <div className="actionHeader">
-            <Typography align="center" variant="h1" color="primary">
-              Grandma's Cookbook
-            </Typography>
-            <Typography variant="h2" align="center" color="primary">
-              Recipes
-            </Typography>
-          </div>
         
         <CardGrid />
       </ThemeProvider>
