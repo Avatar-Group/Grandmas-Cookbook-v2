@@ -8,9 +8,9 @@ const NavBar = () => {
   // this component needs to subscribe to state from userSlice 'userLoggedIn'
   // and conditionally render a logout button if userLoggedIn is true
   const dispatch = useDispatch();
-  const userState = useSelector(state => state.user);
+  const userState = useSelector((state) => state.user);
   const { loggedIn, userImgSrc } = userState;
-  
+
   // when the button is clicked, it needs to make a get request to /auth/google
   // to trigger oauth, and then dispatch initUser and userLoggedIn(true)
 
@@ -59,26 +59,33 @@ const NavBar = () => {
   );
 
   const loginButton = (
-    <Button 
-    color="secondary" 
-    variant="contained"
-    >
-    <a href='/auth/google' style={{textDecoration: 'none', color: 'secondary'}}>Login with google</a>
-  </Button>
-  )
+    <Button color="secondary" variant="contained">
+      <a
+        href="/auth/google"
+        style={{ textDecoration: 'none', color: 'secondary' }}
+      >
+        Login with google
+      </a>
+    </Button>
+  );
 
   return (
     <div>
       <AppBar>
-        <Toolbar style={{display: "flex", flexDirection: "row", justifyContent: "space-between",}}>
-          { loggedIn ? logoutButton : loginButton }
+        <Toolbar
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          {loggedIn ? logoutButton : loginButton}
           {/* <Typography align="center" variant="h4" color="secondary">
             Avatar's Cookbook
           </Typography> */}
           <h1>Avatar's Cookbook</h1>
-          <Avatar src={userImgSrc} />
+          <div>{loggedIn && <Avatar src={userImgSrc} />}</div>
         </Toolbar>
-
       </AppBar>
     </div>
   );
