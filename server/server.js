@@ -23,50 +23,39 @@ const failureRedirect = `${baseurl}login`;
 app.use(cors());
 app.use(express.json());
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    maxAge: 100000000,
-  })
-);
+app.use(session({ 
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  maxAge: 100000000
+}))
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(session({ 
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: false,
-//   maxAge: 100000000
-// }))
-// app.use(passport.initialize());
-// app.use(passport.session());
 
+// put this isLoggedIn middleware in all protected routes
+const isLoggedIn = (req, res, next) =>  req.user ? next() : res.sendStatus(401);
 
-// // put this isLoggedIn middleware in all protected routes
-// const isLoggedIn = (req, res, next) =>  req.user ? next() : res.sendStatus(401);
+// testing route for google oauth
+app.get('/auth', (req, res) => {
+  res.send('<a href="/auth/google">Authenticate with Google</a>')
+});
 
-// // testing route for google oauth
-// app.get('/auth', (req, res) => {
-//   res.send('<a href="/auth/google">Authenticate with Google</a>')
-// });
+// when a get request is made to /auth/google, passport.authenticate redirects to google oauth
+app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
+// once that process is complete, google redirects to the callbackURL (/google/callback here)
+// during this process, passport handles the token req/res, user req/res, etc.
+// https://www.passportjs.org/concepts/oauth2/authentication/
+// when all that is done, it calls the verify function in the GoogleStrategy passed to passport.use (auth.js)
 
-// // when a get request is made to /auth/google, passport.authenticate redirects to google oauth
-// app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
-// // once that process is complete, google redirects to the callbackURL (/google/callback here)
-// // during this process, passport handles the token req/res, user req/res, etc.
-// // https://www.passportjs.org/concepts/oauth2/authentication/
-// // when all that is done, it calls the verify function in the GoogleStrategy passed to passport.use (auth.js)
+app.get('/google/callback', passport.authenticate('google', {
+  successRedirect,
+  failureRedirect
+}))
 
-// app.get('/google/callback', passport.authenticate('google', {
-//   successRedirect,
-//   failureRedirect
-// }))
-
-// app.get('/google/callback', passport.authenticate('google'), (req, res) => {
-//   console.log(req.user);
-//   res.status(200).json(req.user.id);
-// })
+app.get('/google/callback', passport.authenticate('google'), (req, res) => {
+  console.log(req.user);
+  res.status(200).json(req.user.id);
+})
 
 // statically serve everything in the dist folder on the route '/dist'
 app.use('/dist', express.static(path.join(__dirname, '../dist/')));
