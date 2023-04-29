@@ -7,7 +7,19 @@ body {
     background-color: $ternary;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
+#cabbage {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
 
 button:hover {
     cursor: url('https://i.imgur.com/mYW4wI5.png'), auto;

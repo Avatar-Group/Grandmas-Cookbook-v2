@@ -4,11 +4,11 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "test": "jest --verbose --coverage --watch",
+    "testServer": "NODE_ENV=test nodemon server/server.js",
+    "test": "jest --verbose --coverage --watch --detectOpenHandles",
     "start": "NODE_ENV=production node server/server.js",
     "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development webpack serve --open & NODE_ENV=development nodemon server/server.js",
-    "backend": "nodemon server/server.js"
+    "dev": "NODE_ENV=development webpack serve --open & NODE_ENV=development nodemon server/server.js"
   },
   "repository": {
     "type": "git",
