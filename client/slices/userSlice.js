@@ -5,13 +5,15 @@ const userSlice = createSlice({
   initialState: {
       loggedIn: false,
       _id: null,
+      userImgSrc: null,
   },
   reducers: {
     // init user (mongo _id)
     initUser: (state, param) => {
       const { payload } = param;
       const tempState = state;
-      tempState._id = { ...state._id, ...payload }
+      tempState._id = payload._id;
+      tempState.userImgSrc = payload.userImgSrc
     },
     // user logged in
     userLoggedIn: (state, param) => {

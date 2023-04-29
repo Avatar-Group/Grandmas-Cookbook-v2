@@ -28,9 +28,9 @@ module.exports = (passport) => {
   (async (request, accessToken, refreshToken, profile, done) => {
     try {
       // console.log('verified!')
-      // console.log('here is the profile:', profile);
+      console.log('here is the profile:', profile);
       const user = await User.findOne({ googleId: profile.id , email: profile._json.email });
-      if (!user) await User.create({ googleId: profile.id, email: profile._json.email });
+      if (!user) await User.create({ googleId: profile.id, email: profile._json.email, userImgSrc: profile._json.picture });
       return done(null, profile);
     } catch (err) {
       console.error(err);

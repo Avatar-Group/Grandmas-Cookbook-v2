@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, AppBar, Button, Container, Toolbar, MuiPaper } from '@mui/material';
+import { Typography, AppBar, Button, Container, Toolbar, Avatar } from '@mui/material';
 import { initUser, userLoggedIn } from '../../slices/userSlice';
 
 
@@ -10,7 +10,9 @@ const NavBar = () => {
   // and conditionally render a logout button if userLoggedIn is true
   const dispatch = useDispatch();
   const userState = useSelector(state => state.user);
-  const { loggedIn } = userState;
+  const { loggedIn, userImgSrc } = userState;
+  console.log(userImgSrc);
+  console.log(userState);
   
   // when the button is clicked, it needs to make a get request to /auth/google
   // to trigger oauth, and then dispatch initUser and userLoggedIn(true)
@@ -25,7 +27,7 @@ const NavBar = () => {
         throw new Error(res.status);
       })
       .then((data) => {
-        dispatch(initUser(data._id));
+        dispatch(initUser({ _id: data._id, userImgSrc: data.userImgSrc }));
         dispatch(userLoggedIn(true));
       })
       .catch((err) => console.log(`Error code: ${err}`));
@@ -41,7 +43,7 @@ const NavBar = () => {
       })
       .then((data) => {
         if (data.message) {
-          dispatch(initUser(null));
+          dispatch(initUser({ _id: null, userImgSrc: null }));
           dispatch(userLoggedIn(false));
         }
       })
@@ -70,14 +72,14 @@ const NavBar = () => {
     return (<div>
       <AppBar>
         <Toolbar style={{display: "flex", flexDirection: "row", justifyContent: "space-between",}}>
-          <span />
-          <Typography align="center" variant="h4" color="secondary">
-            Grandma's Cookbook
-          </Typography>
-          { loggedIn ? 
+        { loggedIn ? 
             logoutButton : 
             loginButton
           }
+          <Typography align="center" variant="h4" color="secondary">
+            Grandma's Cookbook
+          </Typography>
+          <Avatar src={userImgSrc} />
         </Toolbar>
 
       </AppBar>

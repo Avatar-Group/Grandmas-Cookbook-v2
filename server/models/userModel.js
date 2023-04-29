@@ -40,6 +40,9 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  userImgSrc: {
+    type: String
+  }
 });
 
 const User = mongoose.model('user', userSchema);
