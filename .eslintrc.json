@@ -17,6 +17,12 @@
     "no-underscore-dangle": "off",
     "import/extensions": ["warn", "always", { "js": "never" }],
     "no-unused-vars": "warn",
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["**/*.test.js", "**/*.spec.js"]
+      }
+    ]
   }
 }
