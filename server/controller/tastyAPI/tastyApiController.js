@@ -8,7 +8,7 @@ const tastyApiController = {};
 const options = {
     method: 'GET',
     headers: {
-        'X-RapidAPI-Key': '8403d18d56msh5d278e6cc8c7ebfp19889cjsne960dfd44ed5',
+        'X-RapidAPI-Key': '01d32a5241mshbc4c126f27201e5p1dbab9jsn75500',
         'X-RapidAPI-Host': 'tasty.p.rapidapi.com'
       }
 }

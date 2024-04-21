@@ -1,33 +1,26 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateCard } from '../../slices/cardSlice';
-import { purple } from '@mui/material/colors';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { useDispatch, useSelector } from 'react-redux';
+import { Tooltip } from '@mui/material';
+import { deleteCard,updateCard } from '../../slices/cardSlice';
+import {deleteUserRecipe} from '../../slices/userSlice';
 
 export default function MoreButton({ recipe }) {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState('paper');
 
-  //   useEffect(() => {
-  //     if (page) dispatch(getPosts(page));
-  // }, [canEdit, page]);
-
-  //   useEffect(() =>
-  //     if (page) dispatch(getPosts(page));
-  // }, [dispatch, page]);
-
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state);
 
   const [saveEditButton, setSaveEditButton] = React.useState('Edit');
   const [canEdit, setCanEdit] = React.useState(false);
-
-  // const [ingredientList, setIngredientList] = React.useState(recipe.ingredientList ? recipe.ingredientList.join('\n') : '');
-  // const [directions, setDirections] = React.useState(recipe.direction ? recipe.directions.join('\n') : '');
 
   function setSaveEditButtonLogic() {
     if (saveEditButton === 'Edit') {
@@ -39,20 +32,17 @@ export default function MoreButton({ recipe }) {
 
   const canEditLogic = () => {
     if (canEdit) {
-      console.log(
-        'ingredientText',
-        document.getElementById(`${recipe.id}ingredientText`).textContent
-      );
       setSaveEditButton('Edit');
-      fetch(`/recipe/update/${recipe.id}`, {
+      fetch(`/recipe/update/${recipe._id}`, {
         method: 'PUT',
+        // edit the ingredients & directions list and also formatting by separating into new lines
         body: JSON.stringify({
           ...recipe,
           ingredientList: document
-            .getElementById(`${recipe.id}ingredientText`)
+            .getElementById(`${recipe._id}ingredientText`)
             .textContent.split('\n'),
           directions: document
-            .getElementById(`${recipe.id}directions`)
+            .getElementById(`${recipe._id}directions`)
             .textContent.split('\n'),
         }),
         headers: {
@@ -64,13 +54,33 @@ export default function MoreButton({ recipe }) {
           throw new Error(res.status);
         })
         .then((data) => {
-          // console.log(data);
+          // setting updated recipe information to the cardSlice file
           dispatch(updateCard(data));
         })
         .catch((err) => console.log(`Error code: ${err}`));
     } else setSaveEditButton('Save');
     setCanEdit((state) => !state);
   };
+
+  const setDeleteButtonLogic = async () => {
+    try {
+      const recipeRes = await fetch(`/recipe/delete/${recipe._id}`, {
+        method: 'DELETE',
+      });
+      const userRes = await fetch(`/user/postedRecipe/${recipe._id}`, {
+        method: 'DELETE',
+      });
+      if (recipeRes.ok && userRes.ok) {
+        dispatch(deleteCard(recipe));
+        dispatch(deleteUserRecipe(recipe));
+        return;
+      }
+      throw new Error(recipeRes.status + userRes.status);
+    } catch (err) {
+      console.log(`Error code: ${err}`);
+    }
+  };
+
 
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
@@ -92,10 +102,17 @@ export default function MoreButton({ recipe }) {
   }, [open]);
 
   return (
-    <div>
-      <Button color="success" onClick={handleClickOpen('paper')}>
-        More
-      </Button>
+    <>
+      <Tooltip title="More Info">
+        <Button
+          variant="contained"
+          size="small"
+          onClick={handleClickOpen('paper')}
+          sx={{ minWidth: '25px' }}
+        >
+          <ReadMoreIcon sx={{ color: 'black' }} />
+        </Button>
+      </Tooltip>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -106,10 +123,11 @@ export default function MoreButton({ recipe }) {
         <DialogTitle id="scroll-dialog-title">{recipe.title}</DialogTitle>
         <DialogContent dividers={scroll === 'paper'}>
           <DialogContentText
-            id={`${recipe.id}ingredientText`}
+            id={`${recipe._id}ingredientText`}
             ref={descriptionElementRef}
             tabIndex={-1}
             contentEditable={canEdit.toString()}
+            suppressContentEditableWarning
             // multiline
             style={{ whiteSpace: 'pre-line' }}
           >
@@ -119,10 +137,11 @@ export default function MoreButton({ recipe }) {
 
         <DialogContent dividers={scroll === 'paper'}>
           <DialogContentText
-            id={`${recipe.id}directions`}
+            id={`${recipe._id}directions`}
             ref={descriptionElementRef}
             tabIndex={-1}
             contentEditable={canEdit.toString()}
+            suppressContentEditableWarning
             // multiline
             style={{ whiteSpace: 'pre-line' }}
           >
@@ -131,14 +150,29 @@ export default function MoreButton({ recipe }) {
         </DialogContent>
 
         <DialogActions>
-          <Button color="success" onClick={canEditLogic}>
-            {saveEditButton}
-          </Button>
+          {user.postedRecipes &&
+            Object.hasOwn(user.postedRecipes, recipe._id) && (
+              <Tooltip title="Delete Recipe">
+                <Button
+                  size="small"
+                  onClick={setDeleteButtonLogic}
+                  sx={{ color: 'red' }}
+                >
+                  Delete {/* <DeleteForeverIcon sx={{ color: 'red' }} /> */}
+                </Button>
+              </Tooltip>
+            )}
+          {user.postedRecipes &&
+            Object.hasOwn(user.postedRecipes, recipe._id) && (
+              <Button color="success" onClick={canEditLogic}>
+                {saveEditButton}
+              </Button>
+            )}
           <Button color="warning" onClick={handleClose}>
             Close
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }

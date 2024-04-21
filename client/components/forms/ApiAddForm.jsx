@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import { TextField, Button, Box, Typography, Backdrop, CircularProgress, Alert} from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux'
-import { setKeywordResult } from '../../slices/modalSlice.js';
+import { setKeywordResult, toggleModalOn, toggleModalOff } from '../../slices/modalSlice.js';
 import { addCard } from '../../slices/cardSlice'
 import RecipeCard from '../recipeCard.jsx';
 
-function APIAddForm() {
+function APIAddForm({ setOpenAddRecipe }) {
     const keywordFieldValue = useRef('');
     const tagFieldValue = useRef('');
     const dispatch = useDispatch();
@@ -15,6 +15,7 @@ function APIAddForm() {
     const [success, setSuccess] = React.useState(false);
     const cardArr = []
     
+    // handles toggling of "more details tab" for each recipe card
     const handleClose = () => {
       setOpen(false);
     };
@@ -26,6 +27,7 @@ function APIAddForm() {
         handleOpen();
         setQueryError(true);
         return () => {
+        // update database with new added recipe
         fetch('/recipe/add', 
             {method: 'POST', 
             body: JSON.stringify(recipe),
@@ -36,7 +38,12 @@ function APIAddForm() {
                 if (res.ok) return res.json();
                 throw new Error(res.status);
               })
-            .then(data => dispatch(addCard(data)))
+            // updates state in the cardSlice reducer by adding current data(recipe) as the payload
+            .then(data => {
+                console.log(`this is data from our fetch request: ${data}`)
+                dispatch(addCard(data))
+            }
+                )
             .then(() => handleClose())
             .catch(() => {
                 setQueryError(true);
@@ -86,11 +93,13 @@ function APIAddForm() {
                 throw new Error(res.status);
             })
             .then((data) => {
+                // This loop allows only rendering of 5 recipes for results
                 for (let i = 0; i < 5; i++) {
                     const { title } = data[i];
                     cardArr.push(<RecipeCard key={title} type='addForm' recipe={data[i]} addHandler={addHandler} />)
                 }
                 dispatch(setKeywordResult(cardArr))
+                setOpenAddRecipe(false);
             })
             .then(() => handleClose())
             .catch((err) => {
@@ -101,11 +110,43 @@ function APIAddForm() {
     };
 
     return (
-        <Box>
+        <Box
+            sx={{
+                '& > :not(style)': { m: 1, width: '70ch' },
+                display: 'flex', 
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}
+        >
              {queryError ? <Alert severity="error" style={{border: 'black 5px', background: '#DDBEA9'}}>Could not complete the search</Alert> : null}
-            <TextField id="tagsField" label='tags' inputRef={tagFieldValue}/>
-            <TextField id="keywordField" label='keywords' inputRef={keywordFieldValue}/>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <TextField 
+                sx={{
+                    width: {sm: 300, md: 600},
+                    md: 2,
+                    boxShadow: 7
+                }}
+                id="tagsField" 
+                label='tags' 
+                inputRef={tagFieldValue}
+            />
+            <TextField 
+                sx={{
+                    width: {sm: 300, md: 600},
+                    md: 2,
+                    boxShadow: 4
+                }}
+                id="keywordField" 
+                label='keywords' 
+                inputRef={keywordFieldValue}
+            />
+            <Button 
+                sx={{
+                    boxShadow: 4,
+                    borderRadius: 5
+                }}
+                onClick={handleSubmit}
+            >Submit</Button>
             {keywordResults}
            
             <Backdrop

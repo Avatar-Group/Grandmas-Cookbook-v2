@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
+import { Button } from '@mui/material';
 import AddRecipeTab from './AddRecipeTab.jsx';
 
 const boxStyle = {
@@ -17,20 +17,23 @@ const boxStyle = {
   p: 4,
 };
 
-export default function AddRecipeModal({ open, handleClose }) {
+export default function AddRecipeModal({ open, handleClose, setOpenAddRecipe }) {
   return (
     <Modal
       open={open}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      sx={{ overflow: 'scroll', }}
+      sx={{ overflow: 'scroll' }}
     >
       <Box sx={boxStyle}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          Get New Recipe
+          Recipes
         </Typography>
-        <AddRecipeTab />
+        <AddRecipeTab setOpenAddRecipe={setOpenAddRecipe} />
+        <Button color="warning" onClick={handleClose}>
+          Close
+        </Button>
       </Box>
     </Modal>
   );
